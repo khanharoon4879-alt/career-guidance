@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{% static 'signin.css' %}">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <!-- LEFT SIDE -->
+        <div class="left-side">
+            <img src="{% static 'image/login-image.png' %}" alt="Career Guidance">
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="right-side">
+
+            <div class="login-content">
+
+                <h1>Welcome Back!</h1>
+
+                <p class="subtitle">
+                    Login to continue your career journey
+                </p>
+
+                <form action="/signin/" method="post">
+
+                    {% csrf_token %}
+
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Username"
+                            required>
+                    </div>
+
+                    <div class="input-group">
+                        <input
+                            type="password"
+                            id="pass1"
+                            name="pass1"
+                            placeholder="Password"
+                            required>
+                    </div>
+
+                    <div class="forgot">
+                        <a href="/forgot-password/">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        Login
+                    </button>
+
+                </form>
+
+                <div class="create-account">
+                    <span>Don't have an account?</span>
+                    <a href="/signup/">Create Account</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Details Form</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section h2 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .help {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        select,
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .option {
+            padding: 18px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option:hover {
+            border-color: #4f46e5;
+        }
+
+        .option:has(input:checked) {
+            border-color: #4f46e5;
+            background: #eef0ff;
+        }
+
+        .option input {
+            margin-right: 8px;
+        }
+
+        .option-title {
+            font-weight: bold;
+            font-size: 17px;
+            margin-top: 8px;
+        }
+
+        .option-description {
+            color: #777;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .interests {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .interest {
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .interest:hover {
+            border-color: #4f46e5;
+        }
+
+        .interest:has(input:checked) {
+            border-color: #4f46e5;
+            background: #eef0ff;
+        }
+
+        .interest input {
+            display: none;
+        }
+
+        .emoji {
+            font-size: 30px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .counter {
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back {
+            background: #ddd;
+            color: #222;
+            padding: 14px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+
+        .continue {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #fff3cd;
+            border-radius: 8px;
+        }
+
+        @media(max-width: 700px) {
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .interests {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <h1>DETAILS FORM</h1>
+
+
+    <!-- Messages -->
+
+    {% for message in messages %}
+
+        <div class="message">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <!-- ================================= -->
+        <!-- STEP 1 - GRADE -->
+        <!-- ================================= -->
+
+        {% if step == 1 %}
+
+        <div class="section">
+
+            <h2>
+                Select your child's grade
+            </h2>
+
+            <p class="help">
+                Choose the current grade of your child
+            </p>
+
+
+            <select name="grade" required>
+
+                <option value="">
+                    Select Grade
+                </option>
+
+                <option value="8">
+                    Class 8
+                </option>
+
+                <option value="9">
+                    Class 9
+                </option>
+
+                <option value="10">
+                    Class 10
+                </option>
+
+                <option value="11">
+                    Class 11
+                </option>
+
+                <option value="12">
+                    Class 12
+                </option>
+
+            </select>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================================= -->
+        <!-- STEP 2 - BOARD -->
+        <!-- ================================= -->
+
+        {% if step == 2 %}
+
+        <div class="section">
+
+            <h2>
+                Which board is your child studying in?
+            </h2>
+
+            <p class="help">
+                Different boards have different stream options
+                and college tie-ups
+            </p>
+
+
+            <div class="options">
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="board"
+                        value="SSC"
+                        required
+                    >
+
+                    <div class="option-title">
+                        SSC (Maharashtra State Board)
+                    </div>
+
+                    <div class="option-description">
+                        Maharashtra State Board of Secondary Education
+                    </div>
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="board"
+                        value="CBSE"
+                    >
+
+                    <div class="option-title">
+                        CBSE
+                    </div>
+
+                    <div class="option-description">
+                        Central Board of Secondary Education
+                    </div>
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="board"
+                        value="ICSE"
+                    >
+
+                    <div class="option-title">
+                        ICSE
+                    </div>
+
+                    <div class="option-description">
+                        Indian Certificate of Secondary Education
+                    </div>
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="board"
+                        value="Other"
+                    >
+
+                    <div class="option-title">
+                        Other
+                    </div>
+
+                    <div class="option-description">
+                        IB, IGCSE, or other board
+                    </div>
+
+                </label>
+
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================================= -->
+        <!-- STEP 3 - CITY -->
+        <!-- ================================= -->
+
+        {% if step == 3 %}
+
+        <div class="section">
+
+            <h2>
+                Which city are you looking at?
+            </h2>
+
+            <p class="help">
+                We'll show colleges and options
+                specific to your city
+            </p>
+
+
+            <input
+                type="text"
+                name="city"
+                placeholder="Enter city"
+                required
+            >
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================================= -->
+        <!-- STEP 4 - BUDGET -->
+        <!-- ================================= -->
+
+        {% if step == 4 %}
+
+        <div class="section">
+
+            <h2>
+                What's your annual fee budget?
+            </h2>
+
+            <p class="help">
+                This helps us filter colleges within your budget range
+            </p>
+
+
+            <div class="options">
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="budget"
+                        value="under_25000"
+                        required
+                    >
+
+                    <div class="option-title">
+                        Under ₹25,000
+                    </div>
+
+                    <div class="option-description">
+                        Government & Aided colleges
+                    </div>
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="budget"
+                        value="25000_50000"
+                    >
+
+                    <div class="option-title">
+                        ₹25,000 - ₹50,000
+                    </div>
+
+                    <div class="option-description">
+                        Aided & some private colleges
+                    </div>
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="budget"
+                        value="50000_100000"
+                    >
+
+                    <div class="option-title">
+                        ₹50,000 - ₹1,00,000
+                    </div>
+
+                    <div class="option-description">
+                        Private & premium colleges
+                    </div>
+
+                </label>
+
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="budget"
+                        value="no_constraint"
+                    >
+
+                    <div class="option-title">
+                        No budget constraint
+                    </div>
+
+                    <div class="option-description">
+                        Show all colleges
+                    </div>
+
+                </label>
+
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================================= -->
+        <!-- STEP 5 - INTERESTS -->
+        <!-- ================================= -->
+
+        {% if step == 5 %}
+
+        <div class="section">
+
+            <h2>
+                What interests your child the most?
+            </h2>
+
+            <p class="help">
+                Pick up to 5
+            </p>
+
+
+            <div class="counter">
+
+                Selected:
+                <span id="count">0</span>/5
+
+            </div>
+
+
+            <div class="interests">
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Computers & IT"
+                    >
+
+                    <span class="emoji">💻</span>
+
+                    Computers & IT
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Medical & Healthcare"
+                    >
+
+                    <span class="emoji">🏥</span>
+
+                    Medical & Healthcare
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Business & Finance"
+                    >
+
+                    <span class="emoji">💼</span>
+
+                    Business & Finance
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Arts & Humanities"
+                    >
+
+                    <span class="emoji">🎨</span>
+
+                    Arts & Humanities
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Science & Technology"
+                    >
+
+                    <span class="emoji">🔧</span>
+
+                    Science & Technology
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Law & Public Service"
+                    >
+
+                    <span class="emoji">⚖️</span>
+
+                    Law & Public Service
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Research & Science"
+                    >
+
+                    <span class="emoji">🔬</span>
+
+                    Research & Science
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Media & Communication"
+                    >
+
+                    <span class="emoji">📺</span>
+
+                    Media & Communication
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Healthcare & Caregiving"
+                    >
+
+                    <span class="emoji">💉</span>
+
+                    Healthcare & Caregiving
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Working with Hands"
+                    >
+
+                    <span class="emoji">🛠️</span>
+
+                    Working with Hands
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Design & Fashion"
+                    >
+
+                    <span class="emoji">✏️</span>
+
+                    Design & Fashion
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Food & Hospitality"
+                    >
+
+                    <span class="emoji">🍳</span>
+
+                    Food & Hospitality
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Psychology & Counseling"
+                    >
+
+                    <span class="emoji">🧠</span>
+
+                    Psychology & Counseling
+
+                </label>
+
+
+                <label class="interest">
+
+                    <input
+                        type="checkbox"
+                        name="interests"
+                        value="Sports & Fitness"
+                    >
+
+                    <span class="emoji">⚽</span>
+
+                    Sports & Fitness
+
+                </label>
+
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================================= -->
+        <!-- BUTTONS -->
+        <!-- ================================= -->
+
+        <input
+            type="hidden"
+            name="current_step"
+            value="{{ step }}"
+        >
+
+
+        <div class="buttons">
+
+
+            {% if step > 1 %}
+
+                <a
+                    href="{% url 'details' %}?step={{ step|add:'-1' }}"
+                    class="back"
+                >
+                    ← Back
+                </a>
+
+            {% else %}
+
+                <span></span>
+
+            {% endif %}
+
+
+            {% if step < 5 %}
+
+                <button
+                    type="submit"
+                    class="continue"
+                >
+                    Continue →
+                </button>
+
+            {% else %}
+
+                <button
+                    type="submit"
+                    class="continue"
+                >
+                    Submit →
+                </button>
+
+            {% endif %}
+
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+<!-- ================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================= -->
+
+<script>
+
+const checkboxes =
+    document.querySelectorAll(
+        'input[name="interests"]'
+    );
+
+const count =
+    document.getElementById("count");
+
+
+checkboxes.forEach(function(checkbox) {
+
+    checkbox.addEventListener("change", function() {
+
+        let selected =
+            document.querySelectorAll(
+                'input[name="interests"]:checked'
+            ).length;
+
+
+        if (selected > 5) {
+
+            this.checked = false;
+
+            selected--;
+
+            alert(
+                "You can select maximum 5 interests."
+            );
+        }
+
+
+        count.textContent = selected;
+
+    });
+
+});
+
+</script>
+
+
+</body>
+
+</html>

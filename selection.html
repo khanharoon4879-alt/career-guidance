@@ -1,0 +1,228 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Who's Exploring?</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+        }
+
+        .selection-page {
+            max-width: 900px;
+            margin: 70px auto;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .selection-page h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .selection-page p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .card {
+            width: 320px;
+            padding: 35px 25px;
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card.selected {
+            border-color: #4f46e5;
+            background: #eef0ff;
+        }
+
+        .icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            margin: 10px 0;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: #777;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 45px;
+        }
+
+        button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .back {
+            background: #ddd;
+        }
+
+        .continue {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .continue:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 700px) {
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="selection-page">
+
+    <h1>Who's exploring?</h1>
+
+    <p>This helps us personalize the experience</p>
+
+    <a href="#">❓ Why we ask this</a>
+
+
+    <form method="POST" action="{% url 'selection' %}">
+
+        {% csrf_token %}
+
+        <div class="cards">
+
+            <!-- STUDENT -->
+            <div class="card"
+                 onclick="selectCard('student', this)">
+
+                <div class="icon">🎓</div>
+
+                <h2>I'm a Student</h2>
+
+                <p>
+                    I'm in 10th and exploring my options
+                </p>
+
+            </div>
+
+
+            <!-- PARENT -->
+            <div class="card"
+                 onclick="selectCard('parent', this)">
+
+                <div class="icon">👥</div>
+
+                <h2>I'm a Parent</h2>
+
+                <p>
+                    Helping my child explore options
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Hidden input -->
+        <input
+            type="hidden"
+            name="role"
+            id="role"
+            value=""
+        >
+
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                class="back"
+                onclick="history.back()">
+                ← Back
+            </button>
+
+
+            <button
+                type="submit"
+                class="continue"
+                id="continueBtn"
+                disabled>
+
+                Continue →
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+
+function selectCard(role, card) {
+
+    // Remove previous selection
+    document.querySelectorAll(".card").forEach(function(item) {
+        item.classList.remove("selected");
+    });
+
+    // Select clicked card
+    card.classList.add("selected");
+
+    // Store selected role
+    document.getElementById("role").value = role;
+
+    // Enable Continue button
+    document.getElementById("continueBtn").disabled = false;
+}
+
+</script>
+
+</body>
+</html>

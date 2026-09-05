@@ -1,0 +1,178 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account</title>
+
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+</head>
+
+<body>
+
+    <div class="signup-card">
+
+        <!-- LEFT SIDE -->
+        <div class="left-side">
+
+            <div class="logo">
+                <span>Career</span><b>Guide</b>
+            </div>
+
+            <div class="tagline">
+                <h2>Your Future</h2>
+                <h2>Starts Here</h2>
+            </div>
+
+            <div class="line"></div>
+
+            <p class="left-text">
+                Create your account and get personalized
+                career guidance, course recommendations
+                and much more.
+            </p>
+
+            <!-- IMAGE -->
+            <div class="illustration">
+                <img src="{% static 'career-illustration.png' %}" alt="Career Guidance">
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="right-side">
+
+            <h1>Create Account</h1>
+
+            <p class="subtitle">
+                Join us and take the first step<br>
+                towards your dream career.
+            </p>
+
+
+            <form action="/signup/" method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- NAME -->
+                <div class="input-group">
+
+                    <label for="fname">FirstName</label>
+
+                    <input
+                        type="text"
+                        id="fname"
+                        name="fname"
+                        placeholder="Enter a Name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- LAST NAME -->
+                <div class="input-group">
+
+                    <label for="lname">Last Name</label>
+
+                    <input
+                        type="text"
+                        id="lname"
+                        name="lname"
+                        placeholder="Enter a Lastname"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- USERNAME -->
+                <div class="input-group">
+
+                    <label for="username">Username</label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter Username"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="input-group">
+
+                    <label for="pass1">Password</label>
+
+                    <input
+                        type="password"
+                        id="pass1"
+                        name="pass1"
+                        placeholder="Enter a Password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+                <div class="input-group">
+
+                    <label for="pass2">Confirm Password</label>
+
+                    <input
+                        type="password"
+                        id="pass2"
+                        name="pass2"
+                        placeholder="Enter a Confirm Password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD RULES -->
+                <div class="password-rules">
+
+                    <p>✓ At least 8 characters long</p>
+
+                    <p>✓ Contains letters and numbers</p>
+
+                    <p>✓ Contains at least one special character</p>
+
+                </div>
+
+
+                <!-- SIGNUP BUTTON -->
+                <button type="submit" class="signup-btn">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <div class="login-link">
+
+                Already have an account?
+
+                <a href="/signin/">
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

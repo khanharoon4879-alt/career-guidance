@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Login</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+     <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+        <strong>Message :</strong> {{ message }}
+    </div>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+
+        <h3>Welcome to Pthotil</h3>
+        <h3>Hello {{ user.first_name }}</h3>
+        <h4>You're successfully logged in.</h4>
+
+        <a href="{% url 'signout' %}">
+            <button>SignOut</button>
+        </a>
+
+    {% else %}
+
+    <div class="container">
+
+        <div class="left">
+
+            <h2>LOGIN</h2>
+            <p>How to get started lorem ipsum dolor sit?</p>
+
+            <div class="input-box">
+                <i class="fa fa-user"></i>
+                <input type="text" placeholder="Username">
+            </div>
+
+            <div class="input-box">
+                <i class="fa fa-lock"></i>
+                <input type="password" placeholder="Password">
+            </div>
+
+            <div class="buttons">
+
+    <a href="/signin" class="login-btn">Login</a>            
+
+    <a href="/signup" class="login-btn">Create</a>
+
+    
+
+</div>
+
+        </div>
+
+        <div class="right">
+            <div class="glass">
+                <img src="https://thumbs.dreamstime.com/b/cute-digital-learning-cyber-lifestyle-concept-modern-flat-style-illustration-showing-young-boy-involved-online-technology-442391973.jpg" alt="">
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</body>
+</html>
