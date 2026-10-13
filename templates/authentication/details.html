@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +10,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Details Form</title>
+    <title>Student Details</title>
 
     <style>
 
@@ -20,28 +22,53 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: #f5f7fb;
+            color: #222;
         }
 
         .container {
-            max-width: 900px;
+            width: 92%;
+            max-width: 950px;
             margin: 40px auto;
-            padding: 30px;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            padding: 35px;
+            border-radius: 22px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 10px;
         }
 
-        .section {
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .progress {
+            display: flex;
+            gap: 8px;
             margin-bottom: 35px;
         }
 
+        .progress div {
+            flex: 1;
+            height: 7px;
+            background: #ddd;
+            border-radius: 10px;
+        }
+
+        .progress .active {
+            background: #4f46e5;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
         .section h2 {
-            font-size: 21px;
+            font-size: 22px;
             margin-bottom: 8px;
         }
 
@@ -51,13 +78,20 @@
             margin-bottom: 18px;
         }
 
-        select,
-        input[type="text"] {
+        input[type="text"],
+        input[type="number"],
+        select {
             width: 100%;
             padding: 14px;
-            border: 1px solid #ddd;
+            border: 1px solid #d8d8d8;
             border-radius: 10px;
             font-size: 16px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #4f46e5;
         }
 
         .options {
@@ -69,7 +103,7 @@
         .option {
             padding: 18px;
             border: 2px solid #ddd;
-            border-radius: 12px;
+            border-radius: 13px;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -90,7 +124,7 @@
         .option-title {
             font-weight: bold;
             font-size: 17px;
-            margin-top: 8px;
+            margin-top: 7px;
         }
 
         .option-description {
@@ -107,8 +141,8 @@
 
         .interest {
             border: 2px solid #ddd;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 13px;
+            padding: 16px;
             text-align: center;
             cursor: pointer;
             transition: 0.2s;
@@ -128,36 +162,63 @@
         }
 
         .emoji {
-            font-size: 30px;
             display: block;
+            font-size: 30px;
             margin-bottom: 8px;
         }
 
         .counter {
-            margin: 15px 0;
+            margin-bottom: 15px;
             font-weight: bold;
+        }
+
+        .marks-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .mark-box {
+            padding: 18px;
+            border: 1px solid #ddd;
+            border-radius: 13px;
+            background: #fafafa;
+        }
+
+        .mark-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .marks-note {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef0ff;
+            border-radius: 12px;
+            color: #444;
         }
 
         .buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 40px;
+            align-items: center;
+            margin-top: 35px;
         }
 
-        button {
+        button,
+        .back {
             padding: 14px 30px;
             border: none;
             border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
+            text-decoration: none;
         }
 
         .back {
             background: #ddd;
             color: #222;
-            padding: 14px 30px;
-            border-radius: 10px;
-            text-decoration: none;
         }
 
         .continue {
@@ -166,13 +227,19 @@
         }
 
         .message {
-            padding: 12px;
+            padding: 13px;
             margin-bottom: 20px;
             background: #fff3cd;
-            border-radius: 8px;
+            border-radius: 10px;
+            color: #664d03;
         }
 
         @media(max-width: 700px) {
+
+            .container {
+                width: 95%;
+                padding: 22px;
+            }
 
             .options {
                 grid-template-columns: 1fr;
@@ -180,6 +247,10 @@
 
             .interests {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .marks-grid {
+                grid-template-columns: 1fr;
             }
 
         }
@@ -191,13 +262,33 @@
 
 <body>
 
-
 <div class="container">
 
-    <h1>DETAILS FORM</h1>
+    <h1>Student Details</h1>
+
+    <p class="subtitle">
+        Help us understand your academic profile
+    </p>
 
 
-    <!-- Messages -->
+    <!-- PROGRESS -->
+
+    <div class="progress">
+
+        {% for i in "123456" %}
+
+            {% if step >= forloop.counter %}
+                <div class="active"></div>
+            {% else %}
+                <div></div>
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- MESSAGES -->
 
     {% for message in messages %}
 
@@ -213,27 +304,41 @@
         {% csrf_token %}
 
 
-        <!-- ================================= -->
-        <!-- STEP 1 - GRADE -->
-        <!-- ================================= -->
+        <!-- ================================================= -->
+        <!-- STEP 1 -->
+        <!-- ================================================= -->
 
         {% if step == 1 %}
 
         <div class="section">
 
-            <h2>
-                Select your child's grade
-            </h2>
+            <h2>Student Information</h2>
 
             <p class="help">
-                Choose the current grade of your child
+                Enter the student's basic information.
             </p>
 
+            <label>
+                Student Name
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter student name"
+                required
+            >
+
+            <br><br>
+
+            <label>
+                Current Class
+            </label>
 
             <select name="grade" required>
 
                 <option value="">
-                    Select Grade
+                    Select Class
                 </option>
 
                 <option value="8">
@@ -263,26 +368,22 @@
         {% endif %}
 
 
-        <!-- ================================= -->
-        <!-- STEP 2 - BOARD -->
-        <!-- ================================= -->
+        <!-- ================================================= -->
+        <!-- STEP 2 -->
+        <!-- ================================================= -->
 
         {% if step == 2 %}
 
         <div class="section">
 
-            <h2>
-                Which board is your child studying in?
-            </h2>
+            <h2>Education Board</h2>
 
             <p class="help">
-                Different boards have different stream options
-                and college tie-ups
+                Select the student's current education board.
             </p>
 
 
             <div class="options">
-
 
                 <label class="option">
 
@@ -294,11 +395,11 @@
                     >
 
                     <div class="option-title">
-                        SSC (Maharashtra State Board)
+                        SSC
                     </div>
 
                     <div class="option-description">
-                        Maharashtra State Board of Secondary Education
+                        Maharashtra State Board
                     </div>
 
                 </label>
@@ -355,11 +456,10 @@
                     </div>
 
                     <div class="option-description">
-                        IB, IGCSE, or other board
+                        IB, IGCSE or other board
                     </div>
 
                 </label>
-
 
             </div>
 
@@ -368,23 +468,19 @@
         {% endif %}
 
 
-        <!-- ================================= -->
-        <!-- STEP 3 - CITY -->
-        <!-- ================================= -->
+        <!-- ================================================= -->
+        <!-- STEP 3 -->
+        <!-- ================================================= -->
 
         {% if step == 3 %}
 
         <div class="section">
 
-            <h2>
-                Which city are you looking at?
-            </h2>
+            <h2>Which city are you looking at?</h2>
 
             <p class="help">
-                We'll show colleges and options
-                specific to your city
+                We'll use your city when suggesting suitable colleges.
             </p>
-
 
             <input
                 type="text"
@@ -398,25 +494,22 @@
         {% endif %}
 
 
-        <!-- ================================= -->
-        <!-- STEP 4 - BUDGET -->
-        <!-- ================================= -->
+        <!-- ================================================= -->
+        <!-- STEP 4 -->
+        <!-- ================================================= -->
 
         {% if step == 4 %}
 
         <div class="section">
 
-            <h2>
-                What's your annual fee budget?
-            </h2>
+            <h2>Annual Education Budget</h2>
 
             <p class="help">
-                This helps us filter colleges within your budget range
+                Select your approximate annual education budget.
             </p>
 
 
             <div class="options">
-
 
                 <label class="option">
 
@@ -432,7 +525,7 @@
                     </div>
 
                     <div class="option-description">
-                        Government & Aided colleges
+                        Government and aided options
                     </div>
 
                 </label>
@@ -451,7 +544,7 @@
                     </div>
 
                     <div class="option-description">
-                        Aided & some private colleges
+                        Aided and some private options
                     </div>
 
                 </label>
@@ -470,7 +563,7 @@
                     </div>
 
                     <div class="option-description">
-                        Private & premium colleges
+                        More private options
                     </div>
 
                 </label>
@@ -485,15 +578,14 @@
                     >
 
                     <div class="option-title">
-                        No budget constraint
+                        No Budget Constraint
                     </div>
 
                     <div class="option-description">
-                        Show all colleges
+                        Consider all options
                     </div>
 
                 </label>
-
 
             </div>
 
@@ -502,22 +594,19 @@
         {% endif %}
 
 
-        <!-- ================================= -->
-        <!-- STEP 5 - INTERESTS -->
-        <!-- ================================= -->
+        <!-- ================================================= -->
+        <!-- STEP 5 -->
+        <!-- ================================================= -->
 
         {% if step == 5 %}
 
         <div class="section">
 
-            <h2>
-                What interests your child the most?
-            </h2>
+            <h2>What interests you?</h2>
 
             <p class="help">
-                Pick up to 5
+                Select up to 5 interests.
             </p>
-
 
             <div class="counter">
 
@@ -598,7 +687,7 @@
                         value="Science & Technology"
                     >
 
-                    <span class="emoji">🔧</span>
+                    <span class="emoji">🔬</span>
 
                     Science & Technology
 
@@ -628,7 +717,7 @@
                         value="Research & Science"
                     >
 
-                    <span class="emoji">🔬</span>
+                    <span class="emoji">🧪</span>
 
                     Research & Science
 
@@ -670,57 +759,12 @@
                     <input
                         type="checkbox"
                         name="interests"
-                        value="Working with Hands"
-                    >
-
-                    <span class="emoji">🛠️</span>
-
-                    Working with Hands
-
-                </label>
-
-
-                <label class="interest">
-
-                    <input
-                        type="checkbox"
-                        name="interests"
                         value="Design & Fashion"
                     >
 
                     <span class="emoji">✏️</span>
 
                     Design & Fashion
-
-                </label>
-
-
-                <label class="interest">
-
-                    <input
-                        type="checkbox"
-                        name="interests"
-                        value="Food & Hospitality"
-                    >
-
-                    <span class="emoji">🍳</span>
-
-                    Food & Hospitality
-
-                </label>
-
-
-                <label class="interest">
-
-                    <input
-                        type="checkbox"
-                        name="interests"
-                        value="Psychology & Counseling"
-                    >
-
-                    <span class="emoji">🧠</span>
-
-                    Psychology & Counseling
 
                 </label>
 
@@ -747,9 +791,146 @@
         {% endif %}
 
 
-        <!-- ================================= -->
-        <!-- BUTTONS -->
-        <!-- ================================= -->
+        <!-- ================================================= -->
+        <!-- STEP 6 - MARKS -->
+        <!-- ================================================= -->
+
+        {% if step == 6 %}
+
+        <div class="section">
+
+            <h2>Academic Marks</h2>
+
+            <p class="help">
+                Enter marks out of 100 for each subject.
+                These marks will be used for your career analysis.
+            </p>
+
+
+            <div class="marks-grid">
+
+
+                <div class="mark-box">
+
+                    <label>
+                        🔬 Science
+                    </label>
+
+                    <input
+                        type="number"
+                        name="science"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="Example: 80"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="mark-box">
+
+                    <label>
+                        📐 Mathematics
+                    </label>
+
+                    <input
+                        type="number"
+                        name="mathematics"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="Example: 80"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="mark-box">
+
+                    <label>
+                        📖 English
+                    </label>
+
+                    <input
+                        type="number"
+                        name="english"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="Example: 75"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="mark-box">
+
+                    <label>
+                        🌍 Social Science
+                    </label>
+
+                    <input
+                        type="number"
+                        name="social_science"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="Example: 78"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="mark-box">
+
+                    <label>
+                        📝 Hindi
+                    </label>
+
+                    <input
+                        type="number"
+                        name="hindi"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="Example: 82"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="marks-note">
+
+                <strong>Example:</strong>
+
+                Science 80 + Mathematics 80 +
+                English 75 + Social Science 78 +
+                Hindi 82
+
+                <br><br>
+
+                The system will automatically calculate
+                total marks and percentage.
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================================================= -->
+        <!-- CURRENT STEP -->
+        <!-- ================================================= -->
 
         <input
             type="hidden"
@@ -757,6 +938,10 @@
             value="{{ step }}"
         >
 
+
+        <!-- ================================================= -->
+        <!-- BUTTONS -->
+        <!-- ================================================= -->
 
         <div class="buttons">
 
@@ -777,7 +962,7 @@
             {% endif %}
 
 
-            {% if step < 5 %}
+            {% if step < 6 %}
 
                 <button
                     type="submit"
@@ -792,7 +977,7 @@
                     type="submit"
                     class="continue"
                 >
-                    Submit →
+                    Analyze My Career →
                 </button>
 
             {% endif %}
@@ -800,58 +985,60 @@
 
         </div>
 
-
     </form>
 
 </div>
 
 
-<!-- ================================= -->
-<!-- JAVASCRIPT -->
-<!-- ================================= -->
-
 <script>
 
-const checkboxes =
-    document.querySelectorAll(
-        'input[name="interests"]'
-    );
+    const checkboxes =
+        document.querySelectorAll(
+            'input[name="interests"]'
+        );
 
-const count =
-    document.getElementById("count");
-
-
-checkboxes.forEach(function(checkbox) {
-
-    checkbox.addEventListener("change", function() {
-
-        let selected =
-            document.querySelectorAll(
-                'input[name="interests"]:checked'
-            ).length;
+    const count =
+        document.getElementById("count");
 
 
-        if (selected > 5) {
+    if (checkboxes.length && count) {
 
-            this.checked = false;
+        checkboxes.forEach(
+            function(checkbox) {
 
-            selected--;
+                checkbox.addEventListener(
+                    "change",
+                    function() {
 
-            alert(
-                "You can select maximum 5 interests."
-            );
-        }
+                        let selected =
+                            document.querySelectorAll(
+                                'input[name="interests"]:checked'
+                            ).length;
 
 
-        count.textContent = selected;
+                        if (selected > 5) {
 
-    });
+                            this.checked = false;
 
-});
+                            selected--;
+
+                            alert(
+                                "You can select maximum 5 interests."
+                            );
+
+                        }
+
+                        count.textContent = selected;
+
+                    }
+                );
+
+            }
+        );
+
+    }
 
 </script>
-
-
 </body>
 
 </html>

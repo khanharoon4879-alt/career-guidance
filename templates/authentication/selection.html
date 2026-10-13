@@ -120,6 +120,17 @@
 
 <body>
 
+<div style="background: white; border-bottom: 1px solid #e2e8f0; padding: 14px 40px; display: flex; align-items: center; justify-content: space-between;">
+    <a href="{% url 'index' %}" style="display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 700; color: #0f172a; font-size: 17px;">
+        <span style="width: 28px; height: 28px; background: #5842ed; color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800;">CG</span>
+        <span>Career Guidance</span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="{% url 'index' %}" style="font-size: 13.5px; color: #64748b; text-decoration: none;">← Back to Home</a>
+        <a href="{% url 'signout' %}" style="font-size: 13.5px; color: #ef4444; text-decoration: none; font-weight: 500;">Sign Out</a>
+    </div>
+</div>
+
 <div class="selection-page">
 
     <h1>Who's exploring?</h1>

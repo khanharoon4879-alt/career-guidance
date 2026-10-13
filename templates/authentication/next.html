@@ -6,139 +6,1762 @@
 <head>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Your Career Guidance Report</title>
 
-    <title>Your Career Guidance</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-        }
+/* =========================================================
+   PROFESSIONAL CAREER GUIDANCE UI
+   Theme: Navy + Blue + White
+========================================================= */
 
-        .container {
-            width: 90%;
-            max-width: 1100px;
-            margin: 40px auto;
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        h1 {
-            text-align: center;
-            color: #4f46e5;
-            margin-bottom: 30px;
-        }
+:root {
+    --navy: #0b2342;
+    --navy-2: #12365f;
+    --blue: #1677d2;
+    --blue-light: #eaf4ff;
+    --blue-border: #c9e2fa;
 
-        .ai-result {
-            line-height: 1.7;
-            color: #333;
-        }
+    --text: #183b61;
+    --muted: #637b93;
 
-        .ai-result h1 {
-            color: #4f46e5;
-            text-align: left;
-            margin-top: 30px;
-        }
+    --white: #ffffff;
+    --page: #f4f7fb;
 
-        .ai-result h2 {
-            color: #4f46e5;
-            margin-top: 35px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
-        }
+    --green: #16a673;
+    --red: #e34d5d;
+    --purple: #6952c8;
+    --orange: #ee8b22;
 
-        .ai-result h3 {
-            color: #333;
-            margin-top: 25px;
-        }
+    --shadow:
+        0 5px 18px rgba(17, 55, 91, 0.08);
+}
 
-        .ai-result strong {
-            color: #222;
-        }
 
-        .ai-result ul,
-        .ai-result ol {
-            padding-left: 30px;
-        }
+/* =========================================================
+   BODY
+========================================================= */
 
-        .ai-result li {
-            margin-bottom: 8px;
-        }
+body {
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
 
-        .ai-result blockquote {
-            margin: 20px 0;
-            padding: 15px 20px;
-            background: #eef0ff;
-            border-left: 5px solid #4f46e5;
-            border-radius: 8px;
-        }
+    background:
+        linear-gradient(
+            180deg,
+            #eef4fa 0%,
+            #f8fafc 45%,
+            #eef3f8 100%
+        );
 
-        .ai-result table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            overflow: hidden;
-        }
+    color: var(--text);
+}
 
-        .ai-result th,
-        .ai-result td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
 
-        .ai-result th {
-            background: #4f46e5;
-            color: white;
-        }
+/* =========================================================
+   HEADER
+========================================================= */
 
-        .ai-result tr:nth-child(even) {
-            background: #f8f9ff;
-        }
+.header {
+    height: 68px;
 
-        .back-btn {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 12px 25px;
-            background: #4f46e5;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-        }
+    background:
+        linear-gradient(
+            110deg,
+            #091f3b,
+            #123b67 55%,
+            #0b294d
+        );
 
-        .back-btn:hover {
-            background: #3730a3;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    </style>
+    padding: 0 38px;
+
+    color: white;
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.16);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    font-size: 34px;
+    color: #36a9f2;
+}
+
+.brand h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.brand p {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #c8ddf1;
+}
+
+.home-btn {
+    text-decoration: none;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #277ed7,
+            #1762b7
+        );
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,.15);
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.container {
+    width: calc(100% - 48px);
+
+    max-width: 1280px;
+
+    margin: 18px auto 28px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    min-height: 190px;
+
+    border-radius: 12px;
+
+    padding: 28px 34px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            105deg,
+            #ffffff 0%,
+            #edf7ff 48%,
+            #dff1ff 100%
+        );
+
+    border: 1px solid #c9e3f7;
+
+    box-shadow: var(--shadow);
+}
+
+.hero:before {
+    content: "";
+
+    position: absolute;
+
+    width: 330px;
+    height: 330px;
+
+    right: -100px;
+    top: -120px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(22,119,210,.16),
+            transparent 68%
+        );
+}
+
+.hero:after {
+    content: "🎓";
+
+    position: absolute;
+
+    right: 17%;
+    top: 28px;
+
+    font-size: 110px;
+
+    opacity: .12;
+}
+
+.hero-content {
+    width: 55%;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+.hero h2 {
+    font-size: 30px;
+
+    line-height: 1.18;
+
+    color: var(--navy);
+
+    font-weight: 800;
+}
+
+.hero p {
+    margin-top: 10px;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    color: #45647e;
+}
+
+.hero-line {
+    width: 55px;
+
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1677d2,
+            #48b6f5
+        );
+
+    border-radius: 20px;
+
+    margin-top: 13px;
+}
+
+.hero .quote {
+    font-size: 12px;
+
+    color: #53708a;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.report-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 14px;
+
+    margin-top: 14px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+    background: var(--white);
+
+    border: 1px solid #d6e3ef;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.card:hover {
+    box-shadow:
+        0 8px 24px rgba(17,55,91,.12);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.card-head {
+    min-height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 8px 14px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #f4f9fe,
+            #ffffff
+        );
+
+    border-bottom: 1px solid #e0ebf4;
+}
+
+.icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1684dc,
+            #125cae
+        );
+
+    color: white;
+
+    font-size: 16px;
+
+    box-shadow:
+        0 3px 7px rgba(22,119,210,.18);
+}
+
+.title {
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: var(--navy);
+}
+
+.card-body {
+    padding: 14px;
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 9px;
+}
+
+.profile-item {
+    text-align: center;
+
+    padding: 12px 6px;
+
+    border: 1px solid var(--blue-border);
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f5faff
+        );
+}
+
+.profile-item i {
+    color: var(--blue);
+
+    font-size: 21px;
+
+    margin-bottom: 6px;
+}
+
+.profile-item strong {
+    display: block;
+
+    font-size: 12px;
+
+    color: var(--navy);
+}
+
+.profile-item span {
+    display: block;
+
+    font-size: 10px;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+}
+
+.interest-area {
+    margin-top: 10px;
+
+    padding: 10px;
+
+    background: #f5f9fd;
+
+    border: 1px solid #e1ebf3;
+
+    border-radius: 8px;
+}
+
+.interest-heading {
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: var(--navy);
+
+    margin-bottom: 8px;
+}
+
+.interest-list {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+.interest {
+    background: white;
+
+    border: 1px solid #d4e5f3;
+
+    border-radius: 6px;
+
+    padding: 7px 10px;
+
+    font-size: 10px;
+
+    color: #315875;
+}
+
+.interest i {
+    color: #1677d2;
+}
+
+
+/* =========================================================
+   AI CONTENT
+========================================================= */
+
+.ai-content {
+    font-size: 12px;
+
+    line-height: 1.7;
+
+    color: #34566f;
+}
+
+.ai-content p {
+    margin-bottom: 8px;
+}
+
+.ai-content ul,
+.ai-content ol {
+    margin:
+        7px 0
+        8px
+        19px;
+}
+
+.ai-content li {
+    margin-bottom: 5px;
+}
+
+.ai-content strong {
+    color: var(--navy);
+}
+
+.ai-content h3 {
+    color: #155f9c;
+
+    font-size: 13px;
+
+    margin:
+        10px 0
+        6px;
+}
+
+.ai-content h4 {
+    color: #226b9f;
+
+    font-size: 12px;
+
+    margin:
+        9px 0
+        5px;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.ai-content table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 9px;
+
+    font-size: 10px;
+
+    overflow: hidden;
+
+    border-radius: 7px;
+}
+
+.ai-content th {
+    background:
+        linear-gradient(
+            90deg,
+            #123b67,
+            #176cae
+        );
+
+    color: white;
+
+    padding: 8px;
+
+    text-align: left;
+
+    font-weight: 600;
+}
+
+.ai-content td {
+    padding: 8px;
+
+    border:
+        1px solid #dce8f1;
+
+    color: #385a72;
+}
+
+.ai-content tr:nth-child(even) {
+    background: #f5f9fc;
+}
+
+
+/* =========================================================
+   MARKS
+========================================================= */
+
+.marks {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 9px;
+}
+
+.mark {
+    text-align: center;
+
+    padding: 12px 6px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f5faff
+        );
+
+    border:
+        1px solid #d3e5f3;
+
+    border-radius: 8px;
+}
+
+.mark i {
+    font-size: 19px;
+
+    color: var(--blue);
+
+    margin-bottom: 5px;
+}
+
+.mark strong {
+    display: block;
+
+    font-size: 14px;
+
+    color: var(--navy);
+}
+
+.mark span {
+    font-size: 9px;
+
+    color: var(--muted);
+}
+
+.summary {
+    display: flex;
+
+    gap: 9px;
+
+    margin-top: 10px;
+}
+
+.summary-box {
+    flex: 1;
+
+    text-align: center;
+
+    padding: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf7ff,
+            #f8fcff
+        );
+
+    border:
+        1px solid #c9e3f6;
+
+    border-radius: 8px;
+}
+
+.summary-box strong {
+    font-size: 19px;
+
+    color: #1268ad;
+}
+
+.summary-box span {
+    display: block;
+
+    font-size: 9px;
+
+    color: #60798e;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   CAREER OPTIONS
+========================================================= */
+
+.career-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+.career {
+    padding: 12px;
+
+    border:
+        1px solid #d3e5f2;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f7fbfe
+        );
+}
+
+.career-icon {
+    width: 39px;
+    height: 39px;
+
+    border-radius: 10px;
+
+    background: #e8f5ff;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: var(--blue);
+
+    font-size: 18px;
+
+    margin-bottom: 8px;
+}
+
+.career h4 {
+    font-size: 11px;
+
+    color: var(--navy);
+
+    margin-bottom: 6px;
+}
+
+.career p {
+    font-size: 10px;
+
+    line-height: 1.55;
+
+    color: #4a687e;
+}
+
+.best {
+    display: inline-block;
+
+    margin-top: 7px;
+
+    padding: 4px 8px;
+
+    background: #159c6e;
+
+    color: white;
+
+    border-radius: 5px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ROADMAP
+========================================================= */
+
+.roadmap {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+.road {
+    padding: 13px;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f8fcff,
+            #eef7fd
+        );
+
+    border:
+        1px solid #cce2f2;
+
+    position: relative;
+}
+
+.road h4 {
+    color: #1267a6;
+
+    font-size: 12px;
+
+    margin-bottom: 7px;
+}
+
+.road ul {
+    margin-left: 16px;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+    color: #45667e;
+}
+
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+.skill-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.skill {
+    display: grid;
+
+    grid-template-columns:
+        130px 1fr 38px;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.skill-name {
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #294e6a;
+}
+
+.skill-bar {
+    height: 8px;
+
+    background: #e3ebf2;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.skill-fill {
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #126fc2,
+            #34a9ee
+        );
+
+    border-radius: 20px;
+}
+
+.skill-percent {
+    font-size: 9px;
+
+    color: #527089;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-area {
+    margin-top: 18px;
+
+    text-align: center;
+}
+
+.back {
+    display: inline-block;
+
+    color: white;
+
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #176fc4,
+            #104f9a
+        );
+
+    padding: 11px 28px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 4px 10px rgba(18,88,150,.2);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    margin-top: 28px;
+
+    padding: 18px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            100deg,
+            #0a2342,
+            #143e68
+        );
+
+    color: #d8e8f5;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 950px) {
+
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .career-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media(max-width: 650px) {
+
+    .header {
+        padding: 0 14px;
+    }
+
+    .brand h1 {
+        font-size: 17px;
+    }
+
+    .home-btn {
+        padding: 8px 10px;
+        font-size: 10px;
+    }
+
+    .container {
+        width: calc(100% - 20px);
+    }
+
+    .hero {
+        padding: 22px;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+
+    .hero h2 {
+        font-size: 24px;
+    }
+
+    .profile-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .marks {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .career-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .roadmap {
+        grid-template-columns: 1fr;
+    }
+
+    .skill {
+        grid-template-columns:
+            90px 1fr 32px;
+    }
+
+    .summary {
+        flex-direction: column;
+    }
+}
+
+</style>
 
 </head>
 
+
 <body>
 
-<div class="container">
 
-    <h1>Your Career Guidance</h1>
+<!-- ================= HEADER ================= -->
 
-    <div class="ai-result">
+<header class="header">
 
-        {{ ai_result|safe }}
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+
+        <div>
+
+            <h1>Career Guidance</h1>
+
+            <p>
+                Your Future &nbsp; • &nbsp; Our Guidance
+            </p>
+
+        </div>
 
     </div>
 
-    <a href="{% url 'index' %}" class="back-btn">
-        Back to Home
+
+    <a href="/" class="home-btn">
+
+        <i class="fa-solid fa-house"></i>
+
+        &nbsp; Back to Home
+
+    </a>
+
+</header>
+
+
+
+<main class="container">
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h2>
+            Your Personalized<br>
+            Career Guidance Report
+        </h2>
+
+        <p>
+            Based on your academic profile, interests,
+            location, financial constraints and future goals.
+        </p>
+
+        <div class="hero-line"></div>
+
+        <p class="quote">
+            "Right guidance today builds a brighter tomorrow."
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<div class="report-grid">
+
+
+<!-- ================= 1 PROFILE ================= -->
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
+        <div class="title">
+            1. Student Profile Analysis
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="profile-grid">
+
+
+            <div class="profile-item">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+                <strong>
+                    Class {{ grade }}
+                </strong>
+
+                <span>
+                    {{ board }}
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <strong>
+                    {{ city }}
+                </strong>
+
+                <span>
+                    Location
+                </span>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                <strong>
+                    {{ budget }}
+                </strong>
+
+                <span>
+                    Annual Budget
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="interest-area">
+
+            <div class="interest-heading">
+                Your Interests
+            </div>
+
+            <div class="interest-list">
+
+                {% for interest in interests %}
+
+                <div class="interest">
+
+                    <i class="fa-solid fa-heart"></i>
+
+                    &nbsp; {{ interest }}
+
+                </div>
+
+                {% empty %}
+
+                <div class="interest">
+                    Career interests submitted
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= 2 PROFILE ANALYSIS ================= -->
+
+{% if sections|length >= 2 %}
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+
+        <div class="title">
+            {{ sections.1.title }}
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.1.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= 3 & 4 ================= -->
+
+{% if sections|length >= 4 %}
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon"
+             style="background:#2bb673;">
+
+            <i class="fa-solid fa-thumbs-up"></i>
+
+        </div>
+
+        <div class="title">
+            {{ sections.2.title }}
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.2.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon"
+             style="background:#e84d5b;">
+
+            <i class="fa-solid fa-bullseye"></i>
+
+        </div>
+
+        <div class="title"
+             style="color:#bd3548;">
+
+            {{ sections.3.title }}
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.3.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= MARKS ================= -->
+
+<section class="card full">
+
+    <div class="card-head">
+
+        <div class="icon">
+
+            <i class="fa-solid fa-chart-column"></i>
+
+        </div>
+
+        <div class="title">
+            Academic Performance
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="marks">
+
+
+            <div class="mark">
+
+                <i class="fa-solid fa-flask"></i>
+
+                <strong>
+                    {{ science }}/100
+                </strong>
+
+                <span>
+                    Science
+                </span>
+
+            </div>
+
+
+            <div class="mark">
+
+                <i class="fa-solid fa-calculator"></i>
+
+                <strong>
+                    {{ mathematics }}/100
+                </strong>
+
+                <span>
+                    Mathematics
+                </span>
+
+            </div>
+
+
+            <div class="mark">
+
+                <i class="fa-solid fa-language"></i>
+
+                <strong>
+                    {{ english }}/100
+                </strong>
+
+                <span>
+                    English
+                </span>
+
+            </div>
+
+
+            <div class="mark">
+
+                <i class="fa-solid fa-book"></i>
+
+                <strong>
+                    {{ social_science }}/100
+                </strong>
+
+                <span>
+                    Social Science
+                </span>
+
+            </div>
+
+
+            <div class="mark">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <strong>
+                    {{ hindi }}/100
+                </strong>
+
+                <span>
+                    Hindi
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="summary">
+
+            <div class="summary-box">
+
+                <strong>
+                    {{ total_marks }}/500
+                </strong>
+
+                <span>
+                    Total Marks
+                </span>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <strong>
+                    {{ percentage }}%
+                </strong>
+
+                <span>
+                    Overall Percentage
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CAREER OPTIONS ================= -->
+
+{% if sections|length >= 5 %}
+
+<section class="card full">
+
+    <div class="card-head">
+
+        <div class="icon">
+
+            <i class="fa-solid fa-star"></i>
+
+        </div>
+
+        <div class="title">
+
+            {{ sections.4.title }}
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.4.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= COURSES ================= -->
+
+{% if sections|length >= 6 %}
+
+<section class="card full">
+
+    <div class="card-head">
+
+        <div class="icon"
+             style="background:#5533a5;">
+
+            <i class="fa-solid fa-graduation-cap"></i>
+
+        </div>
+
+        <div class="title"
+             style="color:#4e2a98;">
+
+            {{ sections.5.title }}
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.5.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= 7 SKILLS ================= -->
+
+{% if sections|length >= 7 %}
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon"
+             style="background:#00a99d;">
+
+            <i class="fa-solid fa-wrench"></i>
+
+        </div>
+
+        <div class="title">
+            {{ sections.6.title }}
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.6.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= 8 ROADMAP ================= -->
+
+{% if sections|length >= 8 %}
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon">
+
+            <i class="fa-solid fa-map"></i>
+
+        </div>
+
+        <div class="title">
+            {{ sections.7.title }}
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.7.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= 9 PROJECTS ================= -->
+
+{% if sections|length >= 9 %}
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon"
+             style="background:#e0529a;">
+
+            <i class="fa-solid fa-lightbulb"></i>
+
+        </div>
+
+        <div class="title"
+             style="color:#c83c82;">
+
+            {{ sections.8.title }}
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.8.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= 10 EXAMS ================= -->
+
+{% if sections|length >= 10 %}
+
+<section class="card">
+
+    <div class="card-head">
+
+        <div class="icon"
+             style="background:#159eaa;">
+
+            <i class="fa-solid fa-certificate"></i>
+
+        </div>
+
+        <div class="title">
+
+            {{ sections.9.title }}
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.9.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ================= 11 FINAL ================= -->
+
+{% if sections|length >= 11 %}
+
+<section class="card full">
+
+    <div class="card-head">
+
+        <div class="icon"
+             style="background:#7040d0;">
+
+            <i class="fa-solid fa-bullseye"></i>
+
+        </div>
+
+        <div class="title">
+
+            {{ sections.10.title }}
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="ai-content">
+
+            {{ sections.10.content|safe }}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+
+</div>
+
+
+
+<!-- ================= BACK HOME ================= -->
+
+<div class="back-area">
+
+    <a href="/" class="back">
+
+        <i class="fa-solid fa-house"></i>
+
+        &nbsp; Back to Home
+
     </a>
 
 </div>
+
+
+</main>
+
+
+
+<footer>
+
+    Your Career &nbsp; • &nbsp;
+    Your Choice &nbsp; • &nbsp;
+    Our Support
+    &nbsp; ❤️
+
+</footer>
+
 
 </body>
 

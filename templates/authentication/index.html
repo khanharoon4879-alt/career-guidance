@@ -1,49 +1,1188 @@
-{% load static %} 
+{% load static %}
 <!DOCTYPE html>
-<html lang="en"> 
-<head> 
-<meta charset="UTF-8"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login UI</title>
-<link rel="stylesheet" href="{% static 'index.css' %}"> 
-</head>
-<body> 
-{% for message in messages %}
- <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
- <strong>Message :</strong> {{ message }}
-<button type="button"class="close"data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button> 
-</div>
-{% endfor %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Careers | Career Guidance</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5842ed;
+            --primary-hover: #4834d4;
+            --primary-light: #f0eeff;
+            --primary-border: #ded8fc;
+            --dark: #0f172a;
+            --slate-800: #1e293b;
+            --slate-600: #475569;
+            --slate-500: #64748b;
+            --slate-400: #94a3b8;
+            --bg-body: #ffffff;
+            --bg-card: #ffffff;
+            --border-card: #e8ecf2;
+            --border-subtle: #f1f5f9;
+        }
 
-{% if user.is_authenticated %} 
-<h3>Hello {{ fname }}</h3>
- <h4>You're successfully logged in.</h4>
-<button type="submit"><a href="/signout">SignOut</a> </button>
-{% else %} 
-<div class="container"> 
-<div class="left-panel"> 
-<h2>LOGIN</h2>
-<p>How to login your account?</p> 
-<form>
-{% csrf_token %}
-<div class="input-box"> 
-<label for="">Username</label> 
-<i class="fa fa-user"></i> 
-<input type="text"name="username" placeholder="Username">
-</div> 
-<div class="input-box">
-<label for="">Password</label> 
-<i class="fa fa-lock"></i>
-<input type="password" name="password" placeholder="Password">
-</div> 
-<button type="submit"> <a href="/signin">Signin</a></button>
-<button type="submit"><a href="/signup">Signup</a></button>
-</form>
-</div>
-<img src="{% static 'image/career-guidance.jpeg' %}"
-         class="logo"
-         alt="Career Guidance">
-</div> 
-{% endif %}
-</body> 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Flash Messages */
+        .alert-container {
+            max-width: 1160px;
+            margin: 15px auto 0;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .alert {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .alert-error, .alert-danger {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+        .alert .close-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.7;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 48px;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .brand-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(88, 66, 237, 0.35);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--slate-600);
+            transition: color 0.15s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .login-link {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--slate-600);
+            transition: color 0.15s ease;
+        }
+
+        .login-link:hover {
+            color: var(--dark);
+        }
+
+        .btn-get-started {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 9px 18px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .btn-get-started:hover {
+            background-color: #1e293b;
+            transform: translateY(-1px);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .user-avatar-circle {
+            width: 22px;
+            height: 22px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+        .btn-signout {
+            font-size: 13px;
+            color: #ef4444;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+        .btn-signout:hover {
+            background: #fee2e2;
+        }
+
+        /* Hero / Header Section */
+        .hero-section {
+            max-width: 1160px;
+            margin: 50px auto 0;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        .badge-career {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .hero-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.8px;
+            line-height: 1.15;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 14.5px;
+            color: var(--slate-500);
+            font-weight: 400;
+            margin-bottom: 28px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 5px 6px 5px 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            max-width: 100%;
+            margin-bottom: 24px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(88, 66, 237, 0.15);
+        }
+
+        .search-icon {
+            color: var(--slate-400);
+            margin-right: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14.5px;
+            color: var(--dark);
+            font-family: inherit;
+            background: transparent;
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-btn {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .search-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Category Filter Tags */
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 35px;
+        }
+
+        .filter-chip {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: var(--slate-600);
+            font-size: 12.5px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-chip:hover {
+            background: #f1f5f9;
+            color: var(--dark);
+        }
+
+        .filter-chip.active {
+            background: var(--primary-light);
+            border-color: var(--primary-border);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Career Grid */
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 60px;
+        }
+
+        .career-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 14px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 175px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .career-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            border-color: #cbd5e1;
+        }
+
+        .card-sparkle {
+            width: 26px;
+            height: 26px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 17.5px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+            letter-spacing: -0.2px;
+        }
+
+        .card-desc {
+            font-size: 13.5px;
+            color: var(--slate-500);
+            line-height: 1.45;
+            margin-bottom: 18px;
+            flex-grow: 1;
+        }
+
+        .card-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.15s ease;
+        }
+
+        .career-card:hover .card-link {
+            gap: 8px;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            color: var(--slate-500);
+            display: none;
+        }
+
+        /* Section Dividers & Sections */
+        .content-section {
+            max-width: 1160px;
+            margin: 20px auto 60px;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+        }
+
+        .section-tag {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .section-subtitle {
+            font-size: 14.5px;
+            color: var(--slate-500);
+        }
+
+        /* School & College Pathways */
+        .pathways-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .pathway-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 22px;
+            transition: all 0.2s ease;
+        }
+
+        .pathway-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .pathway-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .pathway-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .pathway-desc {
+            font-size: 13px;
+            color: var(--slate-500);
+            line-height: 1.45;
+            margin-bottom: 14px;
+        }
+
+        .pathway-exams {
+            font-size: 11.5px;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        /* Counseling Feature Banner */
+        .counseling-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            border-radius: 20px;
+            padding: 44px 48px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            box-shadow: 0 15px 35px rgba(67, 56, 202, 0.25);
+            margin-top: 20px;
+        }
+
+        .counseling-info h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            line-height: 1.25;
+        }
+
+        .counseling-info p {
+            font-size: 15px;
+            color: #c7d2fe;
+            line-height: 1.5;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .counseling-features {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .counseling-feat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #e0e7ff;
+        }
+
+        .btn-counseling-cta {
+            background: #ffffff;
+            color: #312e81;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 14px 28px;
+            border-radius: 10px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            display: inline-block;
+        }
+
+        .btn-counseling-cta:hover {
+            background: #f5f3ff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            border-top: 1px solid #f1f5f9;
+            padding: 30px 48px;
+            background: #ffffff;
+        }
+
+        .footer-inner {
+            max-width: 1160px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12.5px;
+            color: var(--slate-500);
+        }
+
+        .footer-brand {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        .footer-tagline {
+            color: var(--slate-600);
+            font-weight: 500;
+        }
+
+        .footer-disclaimer {
+            color: var(--slate-400);
+            font-size: 11.5px;
+            max-width: 360px;
+            text-align: right;
+        }
+
+        /* Interactive Detail Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 18px;
+            max-width: 580px;
+            width: 100%;
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f1f5f9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--slate-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+        }
+
+        .modal-close:hover {
+            background: #e2e8f0;
+            color: var(--dark);
+        }
+
+        .modal-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .modal-desc {
+            font-size: 14px;
+            color: var(--slate-600);
+            line-height: 1.5;
+            margin-bottom: 22px;
+        }
+
+        .modal-info-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 24px;
+        }
+
+        .modal-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 13px;
+        }
+
+        .modal-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .modal-info-label {
+            color: var(--slate-500);
+            font-weight: 500;
+        }
+
+        .modal-info-value {
+            color: var(--dark);
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-modal-primary {
+            flex: 1;
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-align: center;
+            transition: background 0.15s;
+        }
+
+        .btn-modal-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .career-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .pathways-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .counseling-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 32px 28px;
+            }
+            .footer-inner {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .footer-disclaimer {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .navbar {
+                padding: 14px 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero-section {
+                padding: 0 16px;
+                margin-top: 30px;
+            }
+            .hero-title {
+                font-size: 30px;
+            }
+            .career-grid {
+                grid-template-columns: 1fr;
+            }
+            .pathways-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Flash Messages Container -->
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.remove()">✕</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <a href="{% url 'index' %}" class="navbar-brand">
+            <div class="brand-icon">CG</div>
+            <span>Career Guidance</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="{% url 'index' %}#careers" class="nav-link active">Explore careers</a>
+            <a href="{% url 'schools' %}" class="nav-link">School / College</a>
+            <a href="{% url 'counseling' %}" class="nav-link">Counseling</a>
+        </nav>
+
+        <div class="nav-actions">
+            {% if user.is_authenticated %}
+                <div class="user-pill">
+                    <span class="user-avatar-circle">{{ user.username|make_list|first|upper }}</span>
+                    <span>Hi, {{ user.first_name|default:user.username }}</span>
+                </div>
+                <a href="{% url 'selection' %}" class="btn-get-started" style="background-color: var(--primary);">Assessment</a>
+                <a href="{% url 'signout' %}" class="btn-signout">Sign Out</a>
+            {% else %}
+                <a href="{% url 'signin' %}" class="login-link">Log in</a>
+                <a href="{% url 'signup' %}" class="btn-get-started">Get started</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Main Hero & Career Explorer Section -->
+    <main class="hero-section" id="careers">
+        <span class="badge-career">CAREER EXPLORER</span>
+        <h1 class="hero-title">Explore possible paths.</h1>
+        <p class="hero-subtitle">Compare fields, learn what they involve and save options to revisit.</p>
+
+        <!-- Search Box -->
+        <div class="search-container">
+            <div class="search-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <input 
+                type="text" 
+                id="careerSearchInput" 
+                class="search-input" 
+                placeholder="Search career paths..."
+                autocomplete="off"
+            >
+            <button class="search-btn" id="searchBtn" type="button">Search</button>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="category-filter">
+            <button class="filter-chip active" data-category="all">All Fields</button>
+            <button class="filter-chip" data-category="tech">Technology</button>
+            <button class="filter-chip" data-category="data">Analytics & Finance</button>
+            <button class="filter-chip" data-category="health">Healthcare</button>
+            <button class="filter-chip" data-category="creative">Design & Marketing</button>
+            <button class="filter-chip" data-category="science">Science & Education</button>
+        </div>
+
+        <!-- 3x3 Career Grid (Cards from User's Screenshot) -->
+        <div class="career-grid" id="careerGrid">
+
+            <!-- 1. Cybersecurity Analyst -->
+            <div class="career-card" 
+                 data-category="tech" 
+                 data-title="Cybersecurity Analyst"
+                 data-skills="Network Security, Ethical Hacking, SIEM, Firewalls"
+                 data-edu="B.Tech CS / BCA / CEH Certification"
+                 data-salary="₹6.5 - ₹18 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Cybersecurity Analyst</h3>
+                <p class="card-desc">Help protect systems, networks and information.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 2. Data Analyst -->
+            <div class="career-card" 
+                 data-category="data" 
+                 data-title="Data Analyst"
+                 data-skills="Python, SQL, Tableau, Statistics, Excel"
+                 data-edu="B.Sc Stats / B.Tech / BCA / Data Science"
+                 data-salary="₹5.5 - ₹15 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Data Analyst</h3>
+                <p class="card-desc">Turn data into useful insights and decisions.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 3. Digital Marketing Specialist -->
+            <div class="career-card" 
+                 data-category="creative" 
+                 data-title="Digital Marketing Specialist"
+                 data-skills="SEO, Social Media Ads, Content Strategy, Google Ads"
+                 data-edu="BBA / Mass Comm / Digital Marketing Diploma"
+                 data-salary="₹4.5 - ₹12 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Digital Marketing Specialist</h3>
+                <p class="card-desc">Help organisations reach audiences online.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 4. Environmental Scientist -->
+            <div class="career-card" 
+                 data-category="science" 
+                 data-title="Environmental Scientist"
+                 data-skills="GIS, Environmental Auditing, Ecology, Field Sampling"
+                 data-edu="B.Sc Environmental Science / Geology / Botany"
+                 data-salary="₹4.5 - ₹11 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Environmental Scientist</h3>
+                <p class="card-desc">Study environmental challenges and solutions.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 5. Financial Analyst -->
+            <div class="career-card" 
+                 data-category="data" 
+                 data-title="Financial Analyst"
+                 data-skills="Financial Modeling, Valuation, Equity Research, Excel"
+                 data-edu="B.Com / BBA Finance / MBA / CFA / CA"
+                 data-salary="₹6.0 - ₹18 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Financial Analyst</h3>
+                <p class="card-desc">Evaluate financial information and business performance.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 6. Healthcare Professional -->
+            <div class="career-card" 
+                 data-category="health" 
+                 data-title="Healthcare Professional"
+                 data-skills="Clinical Care, Diagnostics, Patient Management"
+                 data-edu="MBBS / BDS / B.Sc Nursing / B.Pharma / Allied Health"
+                 data-salary="₹5.0 - ₹24 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Healthcare Professional</h3>
+                <p class="card-desc">Support health, care and wellbeing.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 7. Software Developer -->
+            <div class="career-card" 
+                 data-category="tech" 
+                 data-title="Software Developer"
+                 data-skills="Python, JavaScript, React, System Design, Algorithms"
+                 data-edu="B.Tech CS / IT / BCA / MCA / Bootcamp"
+                 data-salary="₹6.0 - ₹22 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Software Developer</h3>
+                <p class="card-desc">Build websites, apps and software tools.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 8. Teacher / Learning Designer -->
+            <div class="career-card" 
+                 data-category="science" 
+                 data-title="Teacher / Learning Designer"
+                 data-skills="Curriculum Design, Pedagogy, EdTech Tools, Mentoring"
+                 data-edu="B.Ed / Master's Degree / Instructional Design Cert"
+                 data-salary="₹4.0 - ₹10 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">Teacher / Learning Designer</h3>
+                <p class="card-desc">Help people learn through teaching and content.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <!-- 9. UI / UX Designer -->
+            <div class="career-card" 
+                 data-category="creative" 
+                 data-title="UI/UX Designer"
+                 data-skills="Figma, Wireframing, User Research, Design Systems"
+                 data-edu="B.Des / Interaction Design / Portfolio"
+                 data-salary="₹5.5 - ₹16 LPA">
+                <div class="card-sparkle">✦</div>
+                <h3 class="card-title">UI / UX Designer</h3>
+                <p class="card-desc">Design clear, accessible digital experiences.</p>
+                <span class="card-link">Explore path →</span>
+            </div>
+
+            <div class="no-results" id="noResults">
+                <p>No matching career paths found. Try a different search term.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- School & College Guidance Section -->
+    <section class="content-section" id="schools">
+        <div class="section-header">
+            <span class="section-tag">ACADEMIC PATHWAYS</span>
+            <h2 class="section-title">School & College Guidance</h2>
+            <p class="section-subtitle">Discover the right stream after 10th and premier colleges after 12th.</p>
+        </div>
+
+        <div class="pathways-grid">
+            <div class="pathway-card">
+                <div class="pathway-icon">🔬</div>
+                <h3 class="pathway-title">Science (PCM / PCB)</h3>
+                <p class="pathway-desc">Best for Engineering, Medicine, Research, Architecture, and Pure Sciences.</p>
+                <span class="pathway-exams">JEE • NEET • CUET</span>
+            </div>
+
+            <div class="pathway-card">
+                <div class="pathway-icon">📈</div>
+                <h3 class="pathway-title">Commerce</h3>
+                <p class="pathway-desc">Gateway to Chartered Accountancy, Banking, Finance, BBA, and Corporate Law.</p>
+                <span class="pathway-exams">CA • IPMAT • CUET</span>
+            </div>
+
+            <div class="pathway-card">
+                <div class="pathway-icon">🎨</div>
+                <h3 class="pathway-title">Arts & Humanities</h3>
+                <p class="pathway-desc">Ideal for Civil Services (UPSC), Journalism, Psychology, Law, and Design.</p>
+                <span class="pathway-exams">CLAT • CUET • NID</span>
+            </div>
+
+            <div class="pathway-card">
+                <div class="pathway-icon">⚡</div>
+                <h3 class="pathway-title">Vocational & Tech</h3>
+                <p class="pathway-desc">Hands-on skill programs, Polytechnic diplomas, and early industry certifications.</p>
+                <span class="pathway-exams">POLYTECHNIC • SKILL</span>
+            </div>
+        </div>
+
+        {% if not user.is_authenticated %}
+        <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 14px; padding: 24px; text-align: center; margin-top: 24px;">
+            <p style="color: #475569; font-size: 14.5px; font-weight: 500; margin-bottom: 14px;">🔒 <strong>Sign in required:</strong> Login with Email & OTP to access the complete School Streams, College Cutoffs & Admissions Portal.</p>
+            <a href="{% url 'schools' %}" class="btn-get-started" style="background: var(--primary);">Login to Access School / College Guide →</a>
+        </div>
+        {% else %}
+        <div style="text-align: center; margin-top: 24px;">
+            <a href="{% url 'schools' %}" class="btn-get-started" style="background: var(--primary);">Open Full Academic & College Portal →</a>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- AI Career Counseling Section -->
+    <section class="content-section" id="counseling">
+        <div class="counseling-banner">
+            <div class="counseling-info">
+                <h3>Personalized AI Career Counseling</h3>
+                <p>Confused about which stream or profession suits your strengths? Our 6-step smart questionnaire analyses your personality, subjects, and interests to suggest ideal paths.</p>
+                <div class="counseling-features">
+                    <div class="counseling-feat"><span>✓</span> 100% Tailored for Students & Parents</div>
+                    <div class="counseling-feat"><span>✓</span> AI-Powered Career Roadmap</div>
+                    <div class="counseling-feat"><span>✓</span> Skill & College Recommendations</div>
+                </div>
+            </div>
+            <div>
+                <a href="{% url 'counseling' %}" class="btn-counseling-cta">Start Free Counseling →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer matching Career Guidance Screenshot -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">Career Guidance</div>
+            <div class="footer-tagline">Explore your options. Build your next step.</div>
+            <div class="footer-disclaimer">Career suggestions support exploration and are not a guarantee of outcomes.</div>
+        </div>
+    </footer>
+
+    <!-- Interactive Career Detail Modal -->
+    <div class="modal-overlay" id="careerModal">
+        <div class="modal-card">
+            <button class="modal-close" id="modalCloseBtn">✕</button>
+            <div class="modal-badge" id="modalCategory">CAREER PATH</div>
+            <h2 class="modal-title" id="modalTitle">Career Title</h2>
+            <p class="modal-desc" id="modalDesc">Detailed description of what this role involves.</p>
+            
+            <div class="modal-info-box">
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Key Skills:</span>
+                    <span class="modal-info-value" id="modalSkills">-</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Degree / Courses:</span>
+                    <span class="modal-info-value" id="modalEdu">-</span>
+                </div>
+                <div class="modal-info-row">
+                    <span class="modal-info-label">Average Salary:</span>
+                    <span class="modal-info-value" id="modalSalary" style="color: #059669;">-</span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <a href="{% url 'counseling' %}" class="btn-modal-primary">Start Counseling for This Path</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Client Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('careerSearchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const cards = document.querySelectorAll('.career-card');
+            const noResults = document.getElementById('noResults');
+            const filterChips = document.querySelectorAll('.filter-chip');
+
+            let currentCategory = 'all';
+
+            // Filter logic
+            function filterCards() {
+                const query = searchInput.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const title = card.getAttribute('data-title').toLowerCase();
+                    const desc = card.querySelector('.card-desc').textContent.toLowerCase();
+                    const category = card.getAttribute('data-category');
+
+                    const matchesCategory = (currentCategory === 'all' || category === currentCategory);
+                    const matchesQuery = (!query || title.includes(query) || desc.includes(query));
+
+                    if (matchesCategory && matchesQuery) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (visibleCount === 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
+
+            // Live Search
+            searchInput.addEventListener('input', filterCards);
+            searchBtn.addEventListener('click', filterCards);
+
+            // Category Chips
+            filterChips.forEach(chip => {
+                chip.addEventListener('click', function () {
+                    filterChips.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.getAttribute('data-category');
+                    filterCards();
+                });
+            });
+
+            // Career Detail Modal
+            const modal = document.getElementById('careerModal');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDesc');
+            const modalSkills = document.getElementById('modalSkills');
+            const modalEdu = document.getElementById('modalEdu');
+            const modalSalary = document.getElementById('modalSalary');
+            const modalCategory = document.getElementById('modalCategory');
+
+            cards.forEach(card => {
+                card.addEventListener('click', function () {
+                    modalTitle.textContent = this.getAttribute('data-title');
+                    modalDesc.textContent = this.querySelector('.card-desc').textContent;
+                    modalSkills.textContent = this.getAttribute('data-skills') || 'Analytical, Problem Solving';
+                    modalEdu.textContent = this.getAttribute('data-edu') || 'Relevant Bachelor Degree';
+                    modalSalary.textContent = this.getAttribute('data-salary') || 'Competitive';
+                    modalCategory.textContent = this.getAttribute('data-category').toUpperCase() + ' PATH';
+
+                    modal.style.display = 'flex';
+                });
+            });
+
+            modalCloseBtn.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
 </html>

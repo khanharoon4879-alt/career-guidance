@@ -1,0 +1,189 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP | Career Guidance</title>
+    <link rel="stylesheet" href="{% static 'signin.css' %}">
+    <style>
+        .brand-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            text-decoration: none;
+        }
+        .brand-badge {
+            width: 32px;
+            height: 32px;
+            background: #5842ed;
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+        }
+        .back-link {
+            font-size: 13px;
+            color: #64748b;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .back-link:hover {
+            color: #5842ed;
+        }
+        .auth-alert {
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .auth-alert-error, .auth-alert-danger {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .auth-alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .auth-alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+        .otp-boxes {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .otp-input {
+            width: 100%;
+            height: 52px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.2s;
+            color: #1e1b4b;
+        }
+        .otp-input:focus {
+            border-color: #5842ed;
+            box-shadow: 0 0 0 3px rgba(88, 66, 237, 0.15);
+        }
+        .email-highlight {
+            color: #5842ed;
+            font-weight: 600;
+            word-break: break-all;
+        }
+        .resend-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 18px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        .resend-box a {
+            color: #5842ed;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .resend-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+
+        <!-- LEFT SIDE -->
+        <div class="left-side">
+            <img src="{% static 'image/login-image.png' %}" alt="Career Guidance">
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right-side">
+
+            <div class="login-content">
+
+                <div class="brand-top">
+                    <a href="{% url 'index' %}" class="brand-logo">
+                        <span class="brand-badge">CG</span>
+                        <span>Career Guidance</span>
+                    </a>
+                    <a href="{% url 'signin' %}" class="back-link">← Back to Login</a>
+                </div>
+
+                <h1>Verify OTP</h1>
+                <p class="subtitle">
+                    Enter the 6-digit verification code sent to <br>
+                    <span class="email-highlight">{{ email }}</span>
+                </p>
+
+                {% if messages %}
+                    <div class="auth-messages">
+                        {% for message in messages %}
+                            <div class="auth-alert auth-alert-{{ message.tags|default:'info' }}">
+                                <span>{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form action="{% url 'verify_otp' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="otp"
+                            name="otp"
+                            placeholder="Enter 6-digit OTP"
+                            maxlength="6"
+                            class="otp-input"
+                            required
+                            autofocus
+                        >
+                    </div>
+
+                    <button type="submit" class="login-btn" style="margin-top: 15px;">
+                        Verify & Login →
+                    </button>
+                </form>
+
+                <div class="resend-box">
+                    <span>Didn't receive the code?</span>
+                    <a href="{% url 'resend_otp' %}">Resend OTP</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,545 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School & College Guidance | Career Guidance</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5842ed;
+            --primary-hover: #4834d4;
+            --primary-light: #f0eeff;
+            --primary-border: #ded8fc;
+            --dark: #0f172a;
+            --slate-800: #1e293b;
+            --slate-600: #475569;
+            --slate-500: #64748b;
+            --slate-400: #94a3b8;
+            --bg-body: #ffffff;
+            --bg-card: #ffffff;
+            --border-card: #e8ecf2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 48px;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--dark);
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(88, 66, 237, 0.35);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--slate-600);
+            transition: color 0.15s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .user-avatar-circle {
+            width: 22px;
+            height: 22px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        .btn-signout {
+            font-size: 13px;
+            color: #ef4444;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .btn-signout:hover {
+            background: #fee2e2;
+        }
+
+        /* Container */
+        .portal-container {
+            max-width: 1160px;
+            margin: 40px auto 60px;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        .portal-header {
+            margin-bottom: 35px;
+        }
+
+        .portal-badge {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: var(--primary-light);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .portal-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--dark);
+            letter-spacing: -0.6px;
+            margin-bottom: 8px;
+        }
+
+        .portal-subtitle {
+            font-size: 15px;
+            color: var(--slate-500);
+            max-width: 750px;
+        }
+
+        /* Streams Grid */
+        .streams-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 45px;
+        }
+
+        .stream-card {
+            background: #ffffff;
+            border: 1px solid var(--border-card);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+
+        .stream-card:hover {
+            border-color: #c7d2fe;
+            box-shadow: 0 10px 25px rgba(88, 66, 237, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .stream-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .stream-icon {
+            font-size: 32px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stream-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stream-desc {
+            font-size: 14px;
+            color: var(--slate-600);
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .stream-details {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 16px;
+        }
+
+        .stream-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 13.5px;
+        }
+
+        .stream-row-label {
+            width: 140px;
+            color: var(--slate-500);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .stream-row-val {
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        /* Exam Table */
+        .exams-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 45px;
+        }
+
+        .exams-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .exams-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        .exams-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: #edf2f7;
+            color: var(--slate-600);
+            font-weight: 600;
+            border-radius: 6px;
+        }
+
+        .exams-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--dark);
+        }
+
+        .badge-exam {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* Counseling Banner */
+        .cta-box {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            border-radius: 18px;
+            padding: 38px 44px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cta-box h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .cta-box p {
+            color: #c7d2fe;
+            font-size: 14px;
+            max-width: 600px;
+        }
+
+        .btn-cta {
+            background: white;
+            color: #312e81;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .btn-cta:hover {
+            background: #f5f3ff;
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 14px 20px; }
+            .streams-grid { grid-template-columns: 1fr; }
+            .cta-box { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <a href="{% url 'index' %}" class="navbar-brand">
+            <div class="brand-icon">CG</div>
+            <span>Career Guidance</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="{% url 'index' %}#careers" class="nav-link">Explore careers</a>
+            <a href="{% url 'schools' %}" class="nav-link active">School / College</a>
+            <a href="{% url 'counseling' %}" class="nav-link">Counseling</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="user-pill">
+                <span class="user-avatar-circle">{{ user.username|make_list|first|upper }}</span>
+                <span>Hi, {{ user.first_name|default:user.username }}</span>
+            </div>
+            <a href="{% url 'selection' %}" class="btn-cta" style="background: var(--primary); color: white; padding: 7px 16px; font-size: 13px;">Assessment</a>
+            <a href="{% url 'signout' %}" class="btn-signout">Sign Out</a>
+        </div>
+    </header>
+
+    <div class="portal-container">
+        <div class="portal-header">
+            <span class="portal-badge">ACADEMIC & ADMISSIONS PORTAL</span>
+            <h1 class="portal-title">School Streams & College Guide</h1>
+            <p class="portal-subtitle">Explore in-depth stream comparisons after 10th and key competitive entrance exams after 12th to land admissions in top colleges.</p>
+        </div>
+
+        <!-- 4 Stream Deep Dives -->
+        <div class="streams-grid">
+
+            <!-- Science PCM -->
+            <div class="stream-card">
+                <div class="stream-top">
+                    <div class="stream-icon">🚀</div>
+                    <div>
+                        <h3 class="stream-title">Science (PCM - Physics, Chem, Math)</h3>
+                        <span style="font-size: 12px; color: #64748b;">Engineering, AI, Tech & Defense</span>
+                    </div>
+                </div>
+                <p class="stream-desc">Ideal for students with analytical mindset interested in software, artificial intelligence, robotics, aerospace, architecture, and armed forces.</p>
+                <div class="stream-details">
+                    <div class="stream-row">
+                        <span class="stream-row-label">Top Degrees:</span>
+                        <span class="stream-row-val">B.Tech / B.E, B.Arch, BCA, B.Sc Computer Science, NDA</span>
+                    </div>
+                    <div class="stream-row">
+                        <span class="stream-row-label">Major Exams:</span>
+                        <span class="stream-row-val">JEE Main, JEE Advanced, BITSAT, NDA, CUET</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Science PCB -->
+            <div class="stream-card">
+                <div class="stream-top">
+                    <div class="stream-icon">🩺</div>
+                    <div>
+                        <h3 class="stream-title">Science (PCB - Physics, Chem, Bio)</h3>
+                        <span style="font-size: 12px; color: #64748b;">Medicine, Healthcare & Biotech</span>
+                    </div>
+                </div>
+                <p class="stream-desc">Best for careers in healthcare, surgery, clinical diagnostics, pharmaceuticals, genetics, nursing, veterinary, and biotechnology research.</p>
+                <div class="stream-details">
+                    <div class="stream-row">
+                        <span class="stream-row-label">Top Degrees:</span>
+                        <span class="stream-row-val">MBBS, BDS, BAMS, B.Pharm, B.Sc Biotech, Nursing</span>
+                    </div>
+                    <div class="stream-row">
+                        <span class="stream-row-label">Major Exams:</span>
+                        <span class="stream-row-val">NEET-UG, AIIMS, ICAR, CUET</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commerce -->
+            <div class="stream-card">
+                <div class="stream-top">
+                    <div class="stream-icon">📈</div>
+                    <div>
+                        <h3 class="stream-title">Commerce (with/without Math)</h3>
+                        <span style="font-size: 12px; color: #64748b;">Finance, Business & Accounting</span>
+                    </div>
+                </div>
+                <p class="stream-desc">For students interested in business management, banking, chartered accountancy, corporate finance, equity analysis, and economic policy.</p>
+                <div class="stream-details">
+                    <div class="stream-row">
+                        <span class="stream-row-label">Top Degrees:</span>
+                        <span class="stream-row-val">B.Com (Hons), BBA, BMS, CA, CS, CMA, CFA</span>
+                    </div>
+                    <div class="stream-row">
+                        <span class="stream-row-label">Major Exams:</span>
+                        <span class="stream-row-val">IPMAT (IIMs), CA Foundation, CUET-UG, SET</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arts & Humanities -->
+            <div class="stream-card">
+                <div class="stream-top">
+                    <div class="stream-icon">⚖️</div>
+                    <div>
+                        <h3 class="stream-title">Arts & Humanities</h3>
+                        <span style="font-size: 12px; color: #64748b;">Law, Civil Services, Design & Media</span>
+                    </div>
+                </div>
+                <p class="stream-desc">Focuses on critical thinking, policy-making, legal frameworks, media, public relations, design, psychology, and public administration (UPSC).</p>
+                <div class="stream-details">
+                    <div class="stream-row">
+                        <span class="stream-row-label">Top Degrees:</span>
+                        <span class="stream-row-val">BA LLB (5-yr Law), B.Des, BA Psychology, Journalism</span>
+                    </div>
+                    <div class="stream-row">
+                        <span class="stream-row-label">Major Exams:</span>
+                        <span class="stream-row-val">CLAT (NLUs), CUET-UG, NID DAT, NIFT, AILET</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Exam Table -->
+        <div class="exams-section">
+            <h3 class="exams-title">Premier National Entrance Exams Overview</h3>
+            <table class="exams-table">
+                <thead>
+                    <tr>
+                        <th>Exam Name</th>
+                        <th>Target Streams</th>
+                        <th>Admitting Colleges</th>
+                        <th>Exam Mode</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge-exam">JEE Main & Adv</span></td>
+                        <td>Science (PCM)</td>
+                        <td>IITs, NITs, IIITs, Top Engineering Institutes</td>
+                        <td>Computer Based (CBT)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-exam">NEET-UG</span></td>
+                        <td>Science (PCB)</td>
+                        <td>AIIMS, JIPMER, All Govt & Private Medical Colleges</td>
+                        <td>Pen & Paper (OMR)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-exam">CUET-UG</span></td>
+                        <td>All Streams</td>
+                        <td>Delhi University (DU), BHU, JNU, Central Universities</td>
+                        <td>Computer Based (CBT)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-exam">CLAT</span></td>
+                        <td>All Streams (Arts/Comm/Sci)</td>
+                        <td>24+ National Law Universities (NLUs)</td>
+                        <td>Pen & Paper</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge-exam">IPMAT</span></td>
+                        <td>Commerce / All Streams</td>
+                        <td>IIM Indore, IIM Rohtak, IIM Ranchi (5-yr Integrated BBA+MBA)</td>
+                        <td>Computer Based (CBT)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CTA Box -->
+        <div class="cta-box">
+            <div>
+                <h3>Need Personalized Guidance?</h3>
+                <p>Not sure which stream or college fits your personality and career aspirations? Take our 6-step AI assessment to get tailor-made suggestions.</p>
+            </div>
+            <a href="{% url 'selection' %}" class="btn-cta">Start AI Counseling Now →</a>
+        </div>
+    </div>
+
+</body>
+</html>
