@@ -1,0 +1,9 @@
+﻿services:
+  - type: web
+    name: career-guidance
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn career.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
