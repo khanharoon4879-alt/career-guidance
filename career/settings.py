@@ -41,11 +41,14 @@ ALLOWED_HOSTS = [
     "testserver",
     "career-guidance-zs75.onrender.com",
     ".onrender.com",
+    ".vercel.app",
+    "*.vercel.app",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com",
     "https://career-guidance-zs75.onrender.com",
+    "https://*.vercel.app",
 ]
 
 
