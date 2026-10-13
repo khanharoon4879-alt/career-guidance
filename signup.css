@@ -1,0 +1,438 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #eef2f9;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    padding: 20px;
+}
+
+
+/* =========================
+   MAIN CARD
+========================= */
+
+.signup-card {
+
+    width: 900px;
+    height: 620px;
+
+    background: white;
+
+    display: flex;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.left-side {
+
+    width: 42%;
+
+    background: #07194d;
+
+    color: white;
+
+    padding: 42px 38px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Logo */
+
+.logo {
+
+    font-size: 27px;
+
+    font-weight: bold;
+
+    margin-bottom: 50px;
+}
+
+.logo span {
+    color: white;
+}
+
+.logo b {
+    color: #9b5cff;
+}
+
+
+/* Heading */
+
+.tagline h2 {
+
+    font-size: 34px;
+
+    line-height: 1.15;
+
+    margin-bottom: 3px;
+}
+
+
+.line {
+
+    width: 65px;
+    height: 4px;
+
+    background: #9b5cff;
+
+    border-radius: 5px;
+
+    margin-top: 25px;
+}
+
+
+/* Left Text */
+
+.left-text {
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    margin-top: 25px;
+
+    color: #f0f2ff;
+
+    max-width: 285px;
+}
+
+
+/* Illustration */
+
+.illustration {
+
+    position: absolute;
+
+    left: 25px;
+    right: 20px;
+
+    bottom: -5px;
+
+    height: 260px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: flex-end;
+}
+
+
+.illustration img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    object-position: center bottom;
+}
+
+
+/* Decorative Circle */
+
+.left-side::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    border-radius: 50%;
+
+    background: #43218a;
+
+    top: -80px;
+    right: -80px;
+
+    opacity: 0.7;
+}
+
+
+.left-side::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+
+    background: #43218a;
+
+    bottom: -80px;
+    left: -80px;
+
+    opacity: 0.7;
+}
+
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.right-side {
+
+    width: 58%;
+
+    padding: 42px 55px;
+
+    background: #ffffff;
+
+    overflow-y: auto;
+}
+
+
+/* Title */
+
+.right-side h1 {
+
+    font-size: 36px;
+
+    color: #101d40;
+
+    margin-bottom: 8px;
+}
+
+
+/* Subtitle */
+
+.subtitle {
+
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    color: #777;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.input-group {
+
+    margin-bottom: 14px;
+}
+
+
+.input-group label {
+
+    display: block;
+
+    font-size: 14px;
+
+    color: #222;
+
+    margin-bottom: 6px;
+
+    font-weight: 500;
+}
+
+
+.input-group input {
+
+    width: 100%;
+
+    height: 45px;
+
+    padding: 0 15px;
+
+    border: 1px solid #d8d8d8;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    background: white;
+
+    transition: 0.2s;
+}
+
+
+.input-group input:focus {
+
+    border-color: #7145e8;
+
+    box-shadow: 0 0 0 3px rgba(113, 69, 232, 0.10);
+}
+
+
+.input-group input::placeholder {
+
+    color: #aaa;
+}
+
+
+/* =========================
+   PASSWORD RULES
+========================= */
+
+.password-rules {
+
+    margin-top: 12px;
+
+    margin-bottom: 17px;
+}
+
+
+.password-rules p {
+
+    font-size: 12px;
+
+    color: #555;
+
+    margin-bottom: 5px;
+}
+
+
+.password-rules p::first-letter {
+
+    color: #28b982;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.signup-btn {
+
+    width: 100%;
+
+    height: 48px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: linear-gradient(
+        90deg,
+        #7040df,
+        #9141e8
+    );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.signup-btn:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 8px 18px rgba(112, 64, 223, 0.25);
+}
+
+
+/* =========================
+   LOGIN LINK
+========================= */
+
+.login-link {
+
+    text-align: center;
+
+    margin-top: 18px;
+
+    font-size: 13px;
+
+    color: #777;
+}
+
+
+.login-link a {
+
+    color: #7145e8;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    margin-left: 5px;
+}
+
+
+.login-link a:hover {
+
+    text-decoration: underline;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    .signup-card {
+
+        width: 100%;
+
+        height: auto;
+
+        min-height: 600px;
+    }
+
+
+    .left-side {
+
+        display: none;
+    }
+
+
+    .right-side {
+
+        width: 100%;
+
+        padding: 35px 30px;
+    }
+
+
+    .right-side h1 {
+
+        font-size: 30px;
+    }
+}
