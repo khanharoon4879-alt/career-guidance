@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="forgot">
-                        <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+                        <a href="{% url 'forgot_password' %}" id="forgot-link">Forgot Password?</a>
                     </div>
 
                     <button type="submit" class="login-btn">
@@ -157,5 +157,17 @@
 
     </div>
 
+    <script>
+        const forgotLink = document.getElementById('forgot-link');
+        const emailInput = document.getElementById('email');
+        if (forgotLink && emailInput) {
+            forgotLink.addEventListener('click', function(e) {
+                const val = emailInput.value.trim();
+                if (val) {
+                    forgotLink.href = "{% url 'forgot_password' %}?email=" + encodeURIComponent(val);
+                }
+            });
+        }
+    </script>
 </body>
 </html>

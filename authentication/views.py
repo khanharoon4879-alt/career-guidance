@@ -119,6 +119,9 @@ def signin(request):
         user = User.objects.filter(email__iexact=email_or_user).first()
         if not user:
             user = User.objects.filter(username__iexact=email_or_user).first()
+        if not user and "@" in email_or_user:
+            prefix = email_or_user.split("@")[0]
+            user = User.objects.filter(username__iexact=prefix).first()
 
         if user is not None and user.check_password(pass1):
             if not user.is_active:
@@ -886,35 +889,63 @@ def next(request):
     ai_result = markdown.markdown(ai_answer,extensions=["extra", "tables", "nl2br"])
     return render(request,"authentication/next.html",{"ai_result": ai_result})
 def forgot_password(request):
-
     if request.method == "POST":
+        identifier = (request.POST.get("username") or request.POST.get("email") or "").strip()
+        new_password = request.POST.get("new_password", "")
+        confirm_password = request.POST.get("confirm_password", "")
 
-        username = request.POST.get("username")
-        new_password = request.POST.get("new_password")
-        confirm_password = request.POST.get("confirm_password")
+        if not identifier:
+            messages.error(request, "Please enter your registered Email or Username.")
+            return render(request, "authentication/forgot_password.html")
 
-        try:
-            user = User.objects.get(username=username)
+        # Find user by Email or Username (case-insensitive)
+        user = User.objects.filter(email__iexact=identifier).first()
+        if not user:
+            user = User.objects.filter(username__iexact=identifier).first()
+        if not user and "@" in identifier:
+            prefix = identifier.split("@")[0]
+            user = User.objects.filter(username__iexact=prefix).first()
 
-        except User.DoesNotExist:
-            messages.error(request, "Username not found!")
-            return redirect("forgot_password")
+        if not user:
+            messages.error(request, f"No account found with '{identifier}'. Please check your spelling or register.")
+            return render(request, "authentication/forgot_password.html", {"identifier": identifier})
+
+        if not new_password or not confirm_password:
+            messages.error(request, "Please enter and confirm your new password.")
+            return render(request, "authentication/forgot_password.html", {"identifier": identifier})
 
         if new_password != confirm_password:
             messages.error(request, "Passwords do not match!")
-            return redirect("forgot_password")
+            return render(request, "authentication/forgot_password.html", {"identifier": identifier})
 
-        if len(new_password) < 8:
-            messages.error(request, "Password must be at least 8 characters!")
-            return redirect("forgot_password")
+        if len(new_password) < 6:
+            messages.error(request, "Password must be at least 6 characters!")
+            return render(request, "authentication/forgot_password.html", {"identifier": identifier})
 
+        # Update password
         user.set_password(new_password)
         user.save()
 
-        messages.success(request, "Password changed successfully!")
+        # Send confirmation email
+        target_email = user.email or (user.username if "@" in user.username else "")
+        if target_email:
+            try:
+                from_email = getattr(settings, "DEFAULT_FROM_EMAIL", f"Career Guidance <{getattr(settings, 'EMAIL_HOST_USER', '')}>")
+                send_mail(
+                    subject="Career Guidance - Password Reset Successful",
+                    message=f"Hello {user.first_name or user.username},\n\nYour password for Career Guidance has been successfully reset. You can now log in with your new password.\n\nCareer Guidance Team",
+                    from_email=from_email,
+                    recipient_list=[target_email],
+                    fail_silently=True
+                )
+            except Exception as e:
+                print(f"[RESET EMAIL NOTIFY ERROR] {e}")
+
+        messages.success(request, "Password changed successfully! You can now log in with your new password.")
         return redirect("signin")
 
-    return render(request, "authentication/forgot_password.html")
+    identifier = request.GET.get("email", "")
+    return render(request, "authentication/forgot_password.html", {"identifier": identifier})
 def signout(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
