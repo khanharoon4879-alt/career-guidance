@@ -143,8 +143,10 @@
                     <span class="email-highlight">{{ email }}</span>
                 </p>
 
+                <div id="otp-alert-box" style="display: none; padding: 11px 14px; border-radius: 8px; font-size: 13.5px; margin-bottom: 18px;"></div>
+
                 {% if messages %}
-                    <div class="auth-messages">
+                    <div class="auth-messages" id="django-messages">
                         {% for message in messages %}
                             <div class="auth-alert auth-alert-{{ message.tags|default:'info' }}">
                                 <span>{{ message }}</span>
@@ -153,7 +155,14 @@
                     </div>
                 {% endif %}
 
-                <form action="{% url 'verify_otp' %}" method="post">
+                {% if request.session.otp_hint %}
+                <div style="margin-bottom: 18px; padding: 12px 14px; background: #fefce8; border: 1px solid #fde047; border-radius: 8px; font-size: 13px; color: #854d0e; text-align: center;">
+                    ⚡ <strong>Quick Testing OTP:</strong> <code id="quick-otp" style="font-size: 16px; font-weight: bold; background: #fef08a; padding: 2px 6px; border-radius: 4px; cursor: pointer;" title="Click to paste into input">{{ request.session.otp_hint }}</code>
+                    <div style="font-size: 11px; color: #a16207; margin-top: 4px;">(Click code above to auto-paste)</div>
+                </div>
+                {% endif %}
+
+                <form id="verify-form" action="{% url 'verify_otp' %}" method="post">
                     {% csrf_token %}
 
                     <div class="input-group">
@@ -169,14 +178,14 @@
                         >
                     </div>
 
-                    <button type="submit" class="login-btn" style="margin-top: 15px;">
+                    <button type="submit" id="verify-btn" class="login-btn" style="margin-top: 15px;">
                         Verify & Login →
                     </button>
                 </form>
 
                 <div class="resend-box">
                     <span>Didn't receive the code?</span>
-                    <a href="{% url 'resend_otp' %}">Resend OTP</a>
+                    <a href="javascript:void(0)" id="resend-btn" onclick="handleResendOtp()">Resend OTP</a>
                 </div>
 
                 <div style="margin-top: 14px; padding: 10px 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; font-size: 12.5px; color: #64748b; text-align: center;">
@@ -189,5 +198,107 @@
 
     </div>
 
+    <script>
+        // Quick auto-paste helper
+        const quickOtp = document.getElementById('quick-otp');
+        if (quickOtp) {
+            quickOtp.addEventListener('click', function() {
+                document.getElementById('otp').value = this.innerText.trim();
+                document.getElementById('otp').focus();
+            });
+        }
+
+        function showOtpAlert(message, type) {
+            const box = document.getElementById('otp-alert-box');
+            box.style.display = 'block';
+            box.innerText = message;
+            if (type === 'success') {
+                box.style.backgroundColor = '#ecfdf5';
+                box.style.color = '#065f46';
+                box.style.border = '1px solid #a7f3d0';
+            } else {
+                box.style.backgroundColor = '#fef2f2';
+                box.style.color = '#991b1b';
+                box.style.border = '1px solid #fecaca';
+            }
+        }
+
+        // REST API Verify OTP
+        document.getElementById('verify-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('verify-btn');
+            const otpVal = document.getElementById('otp').value.trim();
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            if (otpVal.length < 6) {
+                showOtpAlert("Please enter a complete 6-digit OTP code.", "error");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Verifying OTP via REST API... ⏳";
+
+            try {
+                const response = await fetch("{% url 'api_verify_otp' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({ otp: otpVal })
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    btn.innerText = "Verified! Redirecting... ✓";
+                    showOtpAlert("OTP Verified! Redirecting to dashboard...", "success");
+                    setTimeout(() => {
+                        window.location.href = data.redirect_url || "{% url 'selection' %}";
+                    }, 500);
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = "Verify & Login →";
+                    showOtpAlert(data.message || "Invalid OTP. Please check the code.", "error");
+                }
+            } catch (err) {
+                console.warn("REST API fetch failed, falling back to form submit:", err);
+                document.getElementById('verify-form').submit();
+            }
+        });
+
+        // REST API Resend OTP
+        async function handleResendOtp() {
+            const resendBtn = document.getElementById('resend-btn');
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            resendBtn.style.pointerEvents = 'none';
+            resendBtn.innerText = "Sending fresh OTP...";
+
+            try {
+                const response = await fetch("{% url 'api_resend_otp' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    }
+                });
+                const data = await response.json();
+                if (data.status === "success") {
+                    showOtpAlert(data.message, "success");
+                    if (data.otp_hint) {
+                        const q = document.getElementById('quick-otp');
+                        if (q) q.innerText = data.otp_hint;
+                    }
+                } else {
+                    showOtpAlert(data.message || "Failed to resend OTP.", "error");
+                }
+            } catch (err) {
+                window.location.href = "{% url 'resend_otp' %}";
+            } finally {
+                resendBtn.style.pointerEvents = 'auto';
+                resendBtn.innerText = "Resend OTP";
+            }
+        }
+    </script>
 </body>
 </html>

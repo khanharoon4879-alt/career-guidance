@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.core.mail import send_mail
 from django.conf import settings
 from google import genai
+from .email_service import dispatch_otp_email
 
 def index(request):
     return render(request, "authentication/index.html")
@@ -79,25 +80,19 @@ def signup(request):
         request.session['otp_next'] = "/selection/"
         request.session['otp_time'] = time.time()
 
-        email_sent = False
-        try:
-            from_email = getattr(settings, "DEFAULT_FROM_EMAIL", f"Career Guidance <{getattr(settings, 'EMAIL_HOST_USER', '')}>")
-            send_mail(
-                subject="Welcome to Career Guidance - Verification OTP",
-                message=f"Hello {fname},\n\nThank you for signing up with Career Guidance!\nYour 6-digit Verification OTP is: {otp}\n\nThis OTP is valid for 10 minutes.\n\nCareer Guidance Team",
-                from_email=from_email,
-                recipient_list=[email],
-                fail_silently=False
-            )
-            email_sent = True
-            print(f"[OTP EMAIL SENT] To: {email} | OTP: {otp}", flush=True)
-        except Exception as e:
-            print(f"[OTP EMAIL ERROR] Could not send to {email}: {e}", flush=True)
+        success, channel, err = dispatch_otp_email(
+            to_email=email,
+            otp=otp,
+            user_name=fname,
+            purpose="Registration"
+        )
 
-        if email_sent:
+        if success:
+            request.session.pop("otp_hint", None)
             messages.success(request, f"Account created! A 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
         else:
-            messages.warning(request, f"Account created! Email dispatch is processing for {email}. Please check your inbox/spam folder or click Resend OTP.")
+            request.session['otp_hint'] = otp
+            messages.warning(request, f"Account created! (Cloud SMTP restricted. For testing: OTP is {otp})")
         return redirect("verify_otp")
 
     return render(request, "authentication/signup.html")
@@ -139,27 +134,20 @@ def signin(request):
             request.session['otp_next'] = next_url
             request.session['otp_time'] = time.time()
 
-            # Send Email
-            email_sent = False
-            if target_email:
-                try:
-                    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", f"Career Guidance <{getattr(settings, 'EMAIL_HOST_USER', '')}>")
-                    send_mail(
-                        subject="Career Guidance Login OTP",
-                        message=f"Hello {user.first_name or user.username},\n\nYour OTP for logging into Career Guidance is: {otp}\n\nThis OTP is valid for 10 minutes.\n\nCareer Guidance Team",
-                        from_email=from_email,
-                        recipient_list=[target_email],
-                        fail_silently=False
-                    )
-                    email_sent = True
-                    print(f"[OTP EMAIL SENT] To: {target_email} | OTP: {otp}", flush=True)
-                except Exception as e:
-                    print(f"[OTP EMAIL ERROR] Could not send to {target_email}: {e}", flush=True)
+            # Send Email via REST API / SMTP
+            success, channel, err = dispatch_otp_email(
+                to_email=target_email or user.email,
+                otp=otp,
+                user_name=user.first_name or user.username,
+                purpose="Login"
+            )
 
-            if email_sent:
+            if success:
+                request.session.pop("otp_hint", None)
                 messages.info(request, f"A 6-digit OTP has been sent to your email ({target_email}). Please check your inbox or spam folder.")
             else:
-                messages.warning(request, f"We tried sending OTP to {target_email or user.username}. If not received, please check spam folder or click Resend OTP.")
+                request.session['otp_hint'] = otp
+                messages.warning(request, f"OTP generated! (Cloud SMTP restricted. For testing: OTP is {otp})")
             return redirect("verify_otp")
         else:
             messages.error(request, "Invalid Email or Password. Please try again.")
@@ -228,25 +216,19 @@ def resend_otp(request):
     request.session['auth_otp'] = otp
     request.session['otp_time'] = time.time()
 
-    email_sent = False
-    try:
-        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", f"Career Guidance <{getattr(settings, 'EMAIL_HOST_USER', '')}>")
-        send_mail(
-            subject="Career Guidance - Resent Login OTP",
-            message=f"Your new OTP for Career Guidance is: {otp}\n\nValid for 10 minutes.\n\nCareer Guidance Team",
-            from_email=from_email,
-            recipient_list=[email],
-            fail_silently=False
-        )
-        email_sent = True
-        print(f"[OTP EMAIL SENT] To: {email} | OTP: {otp}", flush=True)
-    except Exception as e:
-        print(f"[OTP EMAIL ERROR] Could not send to {email}: {e}", flush=True)
+    success, channel, err = dispatch_otp_email(
+        to_email=email,
+        otp=otp,
+        user_name="Student",
+        purpose="Resent Verification"
+    )
 
-    if email_sent:
+    if success:
+        request.session.pop("otp_hint", None)
         messages.info(request, f"A new 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
     else:
-        messages.warning(request, f"Delivery delay encountered for {email}. Please check spam folder or try again.")
+        request.session['otp_hint'] = otp
+        messages.warning(request, f"New OTP generated! (For testing: OTP is {otp})")
     return redirect("verify_otp")
 
 def selection(request):

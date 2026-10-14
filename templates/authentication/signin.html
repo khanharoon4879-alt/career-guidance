@@ -99,8 +99,10 @@
                     Login with your Email and Password to receive your secure OTP.
                 </p>
 
+                <div id="signin-alert-box" style="display: none; padding: 11px 14px; border-radius: 8px; font-size: 13.5px; margin-bottom: 18px;"></div>
+
                 {% if messages %}
-                    <div class="auth-messages">
+                    <div class="auth-messages" id="django-messages">
                         {% for message in messages %}
                             <div class="auth-alert auth-alert-{{ message.tags|default:'error' }}">
                                 <span>{{ message }}</span>
@@ -109,7 +111,7 @@
                     </div>
                 {% endif %}
 
-                <form action="{% url 'signin' %}" method="post">
+                <form id="signin-form" action="{% url 'signin' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ next|default:'' }}">
 
@@ -137,7 +139,7 @@
                         <a href="{% url 'forgot_password' %}" id="forgot-link">Forgot Password?</a>
                     </div>
 
-                    <button type="submit" class="login-btn">
+                    <button type="submit" id="signin-btn" class="login-btn">
                         Continue with OTP →
                     </button>
                     
@@ -158,6 +160,7 @@
     </div>
 
     <script>
+        // Dynamic email forward to forgot password
         const forgotLink = document.getElementById('forgot-link');
         const emailInput = document.getElementById('email');
         if (forgotLink && emailInput) {
@@ -168,6 +171,70 @@
                 }
             });
         }
+
+        function showSigninAlert(message, type) {
+            const box = document.getElementById('signin-alert-box');
+            box.style.display = 'block';
+            box.innerText = message;
+            if (type === 'success') {
+                box.style.backgroundColor = '#ecfdf5';
+                box.style.color = '#065f46';
+                box.style.border = '1px solid #a7f3d0';
+            } else {
+                box.style.backgroundColor = '#fef2f2';
+                box.style.color = '#991b1b';
+                box.style.border = '1px solid #fecaca';
+            }
+        }
+
+        // REST API Send OTP on Sign In
+        document.getElementById('signin-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('signin-btn');
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('pass1').value;
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const nextUrl = document.querySelector('[name=next]').value;
+
+            if (!email || !password) {
+                showSigninAlert("Please enter both Email and Password.", "error");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Sending OTP via REST API... ⏳";
+            const alertBox = document.getElementById('signin-alert-box');
+            if (alertBox) alertBox.style.display = 'none';
+
+            try {
+                const response = await fetch("{% url 'api_send_otp' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        action: "signin",
+                        next: nextUrl
+                    })
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    btn.innerText = "OTP Sent! Forwarding... ✓";
+                    window.location.href = data.redirect_url || "{% url 'verify_otp' %}";
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = "Continue with OTP →";
+                    showSigninAlert(data.message || "Invalid credentials.", "error");
+                }
+            } catch (err) {
+                console.warn("REST API fetch failed, falling back to form submit:", err);
+                document.getElementById('signin-form').submit();
+            }
+        });
     </script>
 </body>
 </html>

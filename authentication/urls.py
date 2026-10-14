@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.urls import path,include
 from . import views
-from django.urls import path
-from django.contrib.auth import views as auth_views
+from . import api_views
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -20,4 +19,9 @@ urlpatterns = [
     path("details/", views.details, name="details"),
     path("next/", views.next, name="next"),
     path("forgot-password/", views.forgot_password, name="forgot_password"),
+
+    # REST API Endpoints
+    path("api/auth/send-otp/", api_views.api_send_otp, name="api_send_otp"),
+    path("api/auth/verify-otp/", api_views.api_verify_otp, name="api_verify_otp"),
+    path("api/auth/resend-otp/", api_views.api_resend_otp, name="api_resend_otp"),
 ]
