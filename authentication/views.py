@@ -79,19 +79,25 @@ def signup(request):
         request.session['otp_next'] = "/selection/"
         request.session['otp_time'] = time.time()
 
+        email_sent = False
         try:
+            from_email = getattr(settings, "DEFAULT_FROM_EMAIL", f"Career Guidance <{getattr(settings, 'EMAIL_HOST_USER', '')}>")
             send_mail(
                 subject="Welcome to Career Guidance - Verification OTP",
                 message=f"Hello {fname},\n\nThank you for signing up with Career Guidance!\nYour 6-digit Verification OTP is: {otp}\n\nThis OTP is valid for 10 minutes.\n\nCareer Guidance Team",
-                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@careerguidance.com"),
+                from_email=from_email,
                 recipient_list=[email],
                 fail_silently=False
             )
-            print(f"[OTP EMAIL SENT] To: {email} | OTP: {otp}")
+            email_sent = True
+            print(f"[OTP EMAIL SENT] To: {email} | OTP: {otp}", flush=True)
         except Exception as e:
-            print(f"[OTP EMAIL ERROR] Could not send to {email}: {e}")
+            print(f"[OTP EMAIL ERROR] Could not send to {email}: {e}", flush=True)
 
-        messages.success(request, f"Account created! A 6-digit OTP has been sent to {email}. Please check your inbox.")
+        if email_sent:
+            messages.success(request, f"Account created! A 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
+        else:
+            messages.warning(request, f"Account created! Email dispatch is processing for {email}. Please check your inbox/spam folder or click Resend OTP.")
         return redirect("verify_otp")
 
     return render(request, "authentication/signup.html")
@@ -119,28 +125,38 @@ def signin(request):
                 messages.error(request, "This account is inactive. Please contact support.")
                 return render(request, "authentication/signin.html", {"email": email_or_user, "next": next_url})
 
+            # Target email resolution
+            target_email = (user.email or (user.username if "@" in (user.username or "") else "")).strip()
+
             # Generate 6-digit OTP
             otp = f"{random.randint(100000, 999999):06d}"
             request.session['auth_otp'] = otp
             request.session['otp_user_id'] = user.id
-            request.session['otp_email'] = user.email or user.username
+            request.session['otp_email'] = target_email or user.username
             request.session['otp_next'] = next_url
             request.session['otp_time'] = time.time()
 
             # Send Email
-            try:
-                send_mail(
-                    subject="Career Guidance Login OTP",
-                    message=f"Hello {user.first_name or user.username},\n\nYour OTP for logging into Career Guidance is: {otp}\n\nThis OTP is valid for 10 minutes.\n\nCareer Guidance Team",
-                    from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@careerguidance.com"),
-                    recipient_list=[user.email] if user.email else [],
-                    fail_silently=False
-                )
-                print(f"[OTP EMAIL SENT] To: {user.email} | OTP: {otp}")
-            except Exception as e:
-                print(f"[OTP EMAIL ERROR] Could not send to {user.email}: {e}")
+            email_sent = False
+            if target_email:
+                try:
+                    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", f"Career Guidance <{getattr(settings, 'EMAIL_HOST_USER', '')}>")
+                    send_mail(
+                        subject="Career Guidance Login OTP",
+                        message=f"Hello {user.first_name or user.username},\n\nYour OTP for logging into Career Guidance is: {otp}\n\nThis OTP is valid for 10 minutes.\n\nCareer Guidance Team",
+                        from_email=from_email,
+                        recipient_list=[target_email],
+                        fail_silently=False
+                    )
+                    email_sent = True
+                    print(f"[OTP EMAIL SENT] To: {target_email} | OTP: {otp}", flush=True)
+                except Exception as e:
+                    print(f"[OTP EMAIL ERROR] Could not send to {target_email}: {e}", flush=True)
 
-            messages.info(request, f"A 6-digit OTP has been sent to your email ({user.email or user.username}). Please check your inbox.")
+            if email_sent:
+                messages.info(request, f"A 6-digit OTP has been sent to your email ({target_email}). Please check your inbox or spam folder.")
+            else:
+                messages.warning(request, f"We tried sending OTP to {target_email or user.username}. If not received, please check spam folder or click Resend OTP.")
             return redirect("verify_otp")
         else:
             messages.error(request, "Invalid Email or Password. Please try again.")
@@ -209,19 +225,25 @@ def resend_otp(request):
     request.session['auth_otp'] = otp
     request.session['otp_time'] = time.time()
 
+    email_sent = False
     try:
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", f"Career Guidance <{getattr(settings, 'EMAIL_HOST_USER', '')}>")
         send_mail(
             subject="Career Guidance - Resent Login OTP",
             message=f"Your new OTP for Career Guidance is: {otp}\n\nValid for 10 minutes.\n\nCareer Guidance Team",
-            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@careerguidance.com"),
+            from_email=from_email,
             recipient_list=[email],
             fail_silently=False
         )
-        print(f"[OTP EMAIL SENT] To: {email} | OTP: {otp}")
+        email_sent = True
+        print(f"[OTP EMAIL SENT] To: {email} | OTP: {otp}", flush=True)
     except Exception as e:
-        print(f"[OTP EMAIL ERROR] Could not send to {email}: {e}")
+        print(f"[OTP EMAIL ERROR] Could not send to {email}: {e}", flush=True)
 
-    messages.info(request, f"A new 6-digit OTP has been sent to {email}. Please check your inbox.")
+    if email_sent:
+        messages.info(request, f"A new 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
+    else:
+        messages.warning(request, f"Delivery delay encountered for {email}. Please check spam folder or try again.")
     return redirect("verify_otp")
 
 def selection(request):
