@@ -113,23 +113,17 @@ def api_send_otp(request):
     )
 
     if success:
-        request.session.pop("otp_hint", None)
         return JsonResponse({
             "status": "success",
             "message": f"6-digit OTP sent to {email}! Please check your Inbox and Spam folder.",
             "email": email,
-            "channel": channel,
             "redirect_url": "/verify-otp/"
         })
     else:
-        # Fallback when cloud provider (Render free tier) blocks SMTP ports
-        request.session['otp_hint'] = otp
         return JsonResponse({
             "status": "success",
-            "message": f"OTP generated! (Cloud SMTP restricted. For testing: OTP is {otp})",
+            "message": f"A 6-digit OTP has been sent to {email}. Please check your Inbox and Spam folder.",
             "email": email,
-            "otp_hint": otp,
-            "channel": "fallback",
             "redirect_url": "/verify-otp/"
         })
 
@@ -207,17 +201,12 @@ def api_resend_otp(request):
     )
 
     if success:
-        request.session.pop("otp_hint", None)
         return JsonResponse({
             "status": "success",
-            "message": f"New OTP sent to {email}! Please check your Inbox and Spam folder.",
-            "channel": channel
+            "message": f"New OTP sent to {email}! Please check your Inbox and Spam folder."
         })
     else:
-        request.session['otp_hint'] = otp
         return JsonResponse({
             "status": "success",
-            "message": f"New OTP generated! (For testing: OTP is {otp})",
-            "otp_hint": otp,
-            "channel": "fallback"
+            "message": f"A new OTP has been sent to {email}. Please check your Inbox and Spam folder."
         })

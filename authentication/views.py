@@ -87,12 +87,7 @@ def signup(request):
             purpose="Registration"
         )
 
-        if success:
-            request.session.pop("otp_hint", None)
-            messages.success(request, f"Account created! A 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
-        else:
-            request.session['otp_hint'] = otp
-            messages.warning(request, f"Account created! (Cloud SMTP restricted. For testing: OTP is {otp})")
+        messages.success(request, f"Account created! A 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
         return redirect("verify_otp")
 
     return render(request, "authentication/signup.html")
@@ -142,12 +137,7 @@ def signin(request):
                 purpose="Login"
             )
 
-            if success:
-                request.session.pop("otp_hint", None)
-                messages.info(request, f"A 6-digit OTP has been sent to your email ({target_email}). Please check your inbox or spam folder.")
-            else:
-                request.session['otp_hint'] = otp
-                messages.warning(request, f"OTP generated! (Cloud SMTP restricted. For testing: OTP is {otp})")
+            messages.info(request, f"A 6-digit OTP has been sent to your email ({target_email}). Please check your inbox or spam folder.")
             return redirect("verify_otp")
         else:
             messages.error(request, "Invalid Email or Password. Please try again.")
@@ -223,12 +213,7 @@ def resend_otp(request):
         purpose="Resent Verification"
     )
 
-    if success:
-        request.session.pop("otp_hint", None)
-        messages.info(request, f"A new 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
-    else:
-        request.session['otp_hint'] = otp
-        messages.warning(request, f"New OTP generated! (For testing: OTP is {otp})")
+    messages.info(request, f"A new 6-digit OTP has been sent to {email}. Please check your inbox or spam folder.")
     return redirect("verify_otp")
 
 def selection(request):

@@ -202,7 +202,7 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "Sending OTP via REST API... ⏳";
+            btn.innerText = "Sending OTP... ⏳";
             const alertBox = document.getElementById('signin-alert-box');
             if (alertBox) alertBox.style.display = 'none';
 
@@ -223,7 +223,7 @@
                 const data = await response.json();
 
                 if (data.status === "success") {
-                    btn.innerText = "OTP Sent! Forwarding... ✓";
+                    btn.innerText = "OTP Sent! ✓";
                     window.location.href = data.redirect_url || "{% url 'verify_otp' %}";
                 } else {
                     btn.disabled = false;
